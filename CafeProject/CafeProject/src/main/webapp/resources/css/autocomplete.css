@@ -1,0 +1,147 @@
+@charset "UTF-8";
+/*--------------------------------------------------CSS Document */
+/*--------------------------------------------------TIME LINE*/
+ 
+ .tooltip-display{
+ 	 max-width: 800px;
+ }
+ 
+/* loading - the AJAX indicator */
+.ui-autocomplete-loading {
+    background: white url('../image/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+ 
+/* scroll results */
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding for vertical scrollbar */
+    padding-right: 5px;
+    z-index:2000;
+}
+
+.autoStaffItem{
+	z-index:1001;
+}
+ 
+.autocomplete-title{
+	font-size: 14px;
+	/* font-weight:bold; */
+	color:#09F;
+}
+
+.autocomplete-desc{
+	font-size:12px;
+	/* color:black; */
+	color:#333333;
+}
+
+.autocomplete-highlight{
+	 /* font-color:blue; */ 
+	 background-color: #ffff66;
+	/* white-space:nowrap; */
+}
+
+li.autocomplete-content:hover{
+	/* font-size:15px !important; */
+	/* background-color:#D9EE90 !important; */
+}
+ 
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+    height: 250px;
+}
+
+ div.ui-datepicker {
+   font-size:11px;
+}
+
+.ui-datepicker-month{
+	/* color:#999; */
+	color:#333;
+	height:20px;
+	padding:0px 0px;
+}
+
+.ui-datepicker-year{
+	/* color:#999; */
+	color:#333;
+	height:20px;
+	padding:0px 0px;
+}
+
+.ui-datepicker-title{
+	color:#333;
+}
+
+/* .ui-datepicker-group{
+	width:250px;
+} */
+.ui-datepicker-calendar >thead>tr>th{
+	max-width:15px;
+	height:15px !important;
+	font-size:11px;
+}
+
+.ui-datepicker-calendar >tbody>tr>td{
+	max-width:10px;
+	text-align:center;
+}
+.ui-datepicker-calendar >tbody>tr>td>a{
+	font-size:11px !important;
+	height:20px !important;
+	text-align:center;
+	margin-top:5px;
+}
+
+.ui-datepicker-group{
+	max-width:200px;
+}
+
+.ui-datepicker-header{
+	width:200px;
+}
+
+.ui-datepicker-prev{
+	margin-top:2px;
+	height:20px !important;
+}
+.ui-datepicker-next{
+	margin-top:2px;
+	height:20px !important;
+}
+
+.line-calendar{
+	line-height:1.7;
+}
+
+.form-control, select{
+	/* padding:0px; */
+	/* padding: 0px 0px; */
+}
+
+a.ui-state-default{
+	line-height:1.7 !important; 
+}
+
+.ui-datepicker-week-end>span{
+	color:red;
+}
+
+.submenu-cal{
+	z-index:9000;
+	width:200px;
+	left:0px !important;
+ }
+ 
+ .ui-state-active{
+ 	color:blue !important;
+ }
+ 
+ .ui-datepicker-date-holiday{
+ 	color:red !important;
+ }

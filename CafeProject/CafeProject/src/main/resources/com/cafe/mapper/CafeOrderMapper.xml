@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.CafeOrderMapper">
+	<resultMap type="CafeOrder" id="idCafeOrder">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="foodSn" column="FOOD_SN"/>
+		<result property="cafeTableSn" column="CAFE_TABLE_SN"/>
+		<result property="price" column="PRICE"/>
+		<result property="orderTime" column="ORDER_TIME"/>
+		<result property="payTime" column="PAY_TIME"/>
+		<result property="numOfFood" column="NUM_OF_FOOD"/>
+		<result property="status" column="STATUS"/>
+		<result property="memo" column="MEMO"/>
+		<result property="totalMoney" column="TOTAL_MONEY"/>
+		<result property="discount" column="DISCOUNT"/>
+		<result property="createStaffSn" column="CREATE_STAFF_SN"/>
+		<result property="lastUpdateStaffSn" column="LAST_UPDATE_STAFF_SN"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<select id="findOrderStatisticInPeriodTime" resultType="map" parameterType="map">
+		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+	</select>
+	
+	<select id="findLimitCafeOrderListGroupByTime" resultType="map" parameterType="map">
+		(SELECT '07:00:00' AS START_TIME, '11:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		AND HOUR(cafeOrder.ORDER_TIME) &lt;=11)
+		UNION ALL
+		(SELECT '12:00:00' AS START_TIME, '17:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		AND HOUR(cafeOrder.ORDER_TIME) &gt;=12
+		AND HOUR(cafeOrder.ORDER_TIME) &lt;=17)
+		UNION ALL
+		(SELECT '18:00:00' AS START_TIME, '23:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		AND HOUR(cafeOrder.ORDER_TIME) &gt;=18)
+	</select>
+	
+	<select id="findLimitCafeOrderListGroupByHour" resultType="map" parameterType="map">
+		SELECT HOUR(cafeOrder.ORDER_TIME) AS HOUR_ORDER, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, 
+		SUM(cafeOrder.TOTAL_MONEY) AS TOTAL_MONEY  
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY HOUR_ORDER
+		<if test="null==orderField or 'timeFrame'==orderField">
+			ORDER BY HOUR_ORDER
+		</if>
+		<if test="'numOfFood'==orderField">
+			ORDER BY NUM_OF_FOOD
+		</if>
+		<if test="'totalMoney'==orderField">
+			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'asc'==sort">
+			ASC
+		</if>
+		<if test="'desc'==sort">
+			DESC
+		</if>
+	</select>
+	
+	<select id="findLimitCafeOrderListGroupByDay" resultType="map" parameterType="map">
+		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY DAY_ORDER_NAME
+		<if test="'numOfFood'==orderField">
+			ORDER BY NUM_OF_FOOD
+		</if>
+		<if test="null== orderField or 'totalMoney'==orderField">
+			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'asc'==sort">
+			ASC
+		</if>
+		<if test="'desc'==sort">
+			DESC
+		</if>
+	</select>
+	
+	<!-- SELECT-->
+	<select id="findLimitCafeOrderListGroupByTable" resultType="map" parameterType="map">
+		SELECT cafeOrder.CAFE_TABLE_SN, cafeTable.NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		FROM CAFE_ORDER cafeOrder, CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY cafeOrder.CAFE_TABLE_SN,cafeTable.NAME
+		<if test="null==orderField or 'numOfFood'==orderField">
+			ORDER BY NUM_OF_FOOD
+		</if>
+		<if test="'totalMoney'==orderField">
+			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'desc'==sort">
+			DESC
+		</if>
+		<if test="'asc'==sort">
+			ASC
+		</if>
+		ORDER BY NUM_OF_FOOD DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	<select id="findFullCafeOrder" resultType="map" parameterType="map">
+		SELECT cafeOrder.*, food.NAME AS FOOD_NAME,cafeTable.NAME AS CAFE_TABLE_NAME ,foodUnit.NAME AS FOOD_UNIT_NAME
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.SN=#{sn}
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="countRecordCafeOrderListGroupByTable" resultType="int" parameterType="map">
+		SELECT COUNT(C_TABLE.CAFE_TABLE_SN)
+		FROM (SELECT cafeOrder.CAFE_TABLE_SN, cafeTable.NAME, SUM(cafeOrder.NUM_OF_FOOD) AS NUM_OF_FOOD, SUM(cafeOrder.TOTAL_MONEY) AS TOTAL_MONEY 
+		FROM CAFE_ORDER cafeOrder, CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY cafeOrder.CAFE_TABLE_SN,cafeTable.NAME) AS C_TABLE
+	</select>
+	
+	<select id="findLimitCafeOrderListGroupByDate" resultType="map" parameterType="map">
+		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME,DATE(cafeOrder.ORDER_TIME) AS ORDER_DATE, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
+		MIN(cafeOrder.ORDER_TIME) AS FIRST_ORDER, MAX(cafeOrder.ORDER_TIME) AS LAST_ORDER 
+		FROM CAFE_ORDER cafeOrder 
+		WHERE cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY ORDER_DATE
+		<if test="null==orderField or 'orderDate'==orderField">
+			ORDER BY ORDER_DATE
+		</if>
+		<if test="'numOfFood'==orderField">
+			ORDER BY NUM_OF_FOOD
+		</if>
+		<if test="'totalMoney'==orderField">
+			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'desc'==sort">
+			DESC
+		</if>
+		<if test="'asc'==sort">
+			ASC
+		</if>
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="countRecordCafeOrderListGroupByDate" resultType="int" parameterType="map">
+		SELECT COUNT(ORDER_DATE_TABLE.ORDER_DATE)
+		FROM (SELECT  DATE(cafeOrder.ORDER_TIME) AS ORDER_DATE
+			FROM CAFE_ORDER cafeOrder 
+			WHERE cafeOrder.STATUS=2
+			AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+			AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+			AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+			GROUP BY ORDER_DATE) AS ORDER_DATE_TABLE
+	
+		
+	</select>
+	
+	<select id="findLimitCafeOrderListGroupByFood" resultType="map" parameterType="map">
+		(SELECT food.SN,food.NAME AS FOOD_NAME,food.PRICE,foodUnit.NAME AS FOOD_UNIT_NAME, foodUnit.SN AS FOOD_UNIT_SN,
+		SUM(cafeOrder.NUM_OF_FOOD) AS NUM_OF_FOOD, SUM(cafeOrder.TOTAL_MONEY) AS TOTAL_MONEY 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit
+		WHERE cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		GROUP BY food.SN,FOOD_NAME,FOOD_UNIT_NAME,FOOD_UNIT_SN)
+		UNION ALL
+		(SELECT food.SN,food.NAME AS FOOD_NAME,food.PRICE,foodUnit.NAME AS FOOD_UNIT_NAME, foodUnit.SN AS FOOD_UNIT_SN,
+			0 AS NUM_OF_FOOD, 0 AS TOTAL_MONEY
+			FROM FOOD food, FOOD_UNIT foodUnit
+			WHERE food.FOOD_UNIT_SN = foodUnit.SN
+			AND food.CAFE_SHOP_SN=#{cafeShopSn}
+			AND NOT EXISTS (SELECT cafeOrder.SN
+							FROM CAFE_ORDER cafeOrder
+							WHERE cafeOrder.FOOD_SN=food.SN
+							AND cafeOrder.STATUS=2
+							AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+							AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+							AND cafeOrder.ORDER_TIME &lt;=#{endTime}))
+		<if test="null==orderField or 'numOfFood'==orderField">
+			ORDER BY NUM_OF_FOOD
+		</if>
+		<if test="'totalMoney'==orderField">
+			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'desc'==sort">
+			DESC
+		</if>
+		<if test="'asc'==sort">
+			ASC
+		</if>
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="findLimitCafeOrderListStatusPay" resultType="map" parameterType="map">
+		SELECT cafeOrder.*, food.NAME AS FOOD_NAME, foodUnit.NAME AS FOOD_UNIT_NAME, cafeTable.NAME AS CAFE_TABLE_NAME 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=cafeTableSn and 0!=cafeTableSn">
+			AND cafeOrder.CAFE_TABLE_SN=#{cafeTableSn}
+		</if>
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		<if test="null==orderField or 'orderTime'==orderField">
+			ORDER BY cafeOrder.ORDER_TIME
+		</if>
+		<if test="'payTime'==orderField">
+			ORDER BY cafeOrder.PAY_TIME
+		</if>
+		<if test="'tableName'==orderField">
+			ORDER BY cafeTable.NAME
+		</if>
+		<if test="'numOfFood'==orderField">
+			ORDER BY cafeOrder.NUM_OF_FOOD
+		</if>
+		<if test="'totalMoney'==orderField">
+			ORDER BY cafeOrder.TOTAL_MONEY
+		</if>
+		<if test="null==sort or 'desc'==sort">
+			DESC
+		</if>
+		<if test="'asc'==sort">
+			ASC
+		</if>
+		
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="countAllCafeOrderListStatusPay" resultType="int" parameterType="map">
+		SELECT COUNT(cafeOrder.SN) 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=2
+		<if test="null!=cafeTableSn and 0!=cafeTableSn">
+			AND cafeOrder.CAFE_TABLE_SN=#{cafeTableSn}
+		</if>
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		AND cafeOrder.CAFE_SHOP_SN =#{cafeShopSn}
+	</select>
+	
+	<select id="countAllNumOfFoodStatusPay" resultType="int" parameterType="map">
+		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=2
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=cafeTableSn and 0!=cafeTableSn">
+			AND cafeOrder.CAFE_TABLE_SN=#{cafeTableSn}
+		</if>
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+	</select>
+	
+	<select id="calculateTotalMoney" resultType="int" parameterType="map">
+		SELECT IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=2
+		<if test="null!=cafeTableSn and 0!=cafeTableSn">
+			AND cafeOrder.CAFE_TABLE_SN=#{cafeTableSn}
+		</if>
+		AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findAllCafeOrderListStatusOrder" resultType="map">
+		SELECT cafeOrder.*, food.NAME AS FOOD_NAME, foodUnit.NAME AS FOOD_UNIT_NAME, cafeTable.NAME AS CAFE_TABLE_NAME 
+		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit,CAFE_TABLE cafeTable 
+		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
+		AND cafeOrder.FOOD_SN=food.SN
+		AND food.FOOD_UNIT_SN = foodUnit.SN
+		AND cafeOrder.STATUS=1
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=cafeTableSn and 0!=cafeTableSn">
+			AND cafeOrder.CAFE_TABLE_SN=${cafeTableSn}
+		</if>
+		<if test="null!=startTime">
+			AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		</if>
+		ORDER BY cafeOrder.ORDER_TIME DESC
+	</select>
+	
+	<select id="findStatisticOfAllTable" resultType="map" parameterType="map">
+		SELECT cafeTable.SN AS CAFE_TABLE_SN, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_ORDER, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY
+		<!-- FROM CAFE_ORDER cafeOrder -->
+		FROM CAFE_TABLE cafeTable
+		LEFT JOIN CAFE_ORDER cafeOrder
+		ON cafeTable.SN = cafeOrder.CAFE_TABLE_SN
+		WHERE cafeOrder.STATUS=1
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=startTime">
+			AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND cafeOrder.ORDER_TIME &lt;=#{endTime}
+		</if>
+		GROUP BY CAFE_TABLE_SN
+	</select>
+	
+	<select id="countCafeOrderOneTable" resultType="int" parameterType="map">
+		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_ORDER
+		FROM CAFE_ORDER cafeOrder
+		WHERE cafeOrder.STATUS=1
+		<!-- AND cafeOrder.ORDER_TIME &gt;=#{startTime}
+		AND cafeOrder.ORDER_TIME &lt;=#{endTime} -->
+		AND cafeOrder.CAFE_TABLE_SN=#{cafeTableSn}
+		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<insert id="insertNewCafeOrder" parameterType="CafeOrder">
+		INSERT INTO CAFE_ORDER(CAFE_SHOP_SN,FOOD_SN,CAFE_TABLE_SN,PRICE,ORDER_TIME,NUM_OF_FOOD,MEMO,TOTAL_MONEY,STATUS,DISCOUNT,CREATE_STAFF_SN,LAST_UPDATE_STAFF_SN) 
+		VALUES(#{cafeShopSn},#{foodSn},#{cafeTableSn},#{price},#{orderTime},#{numOfFood},#{memo},#{totalMoney},#{status},#{discount},#{createStaffSn},#{lastUpdateStaffSn})
+	</insert>
+	
+	<update id="updatePrintAllOrderOfBill" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET NUM_OF_PRINT=NUM_OF_PRINT+1
+		WHERE CAFE_TABLE_SN=#{cafeTableSn}
+		AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<update id="updatePrintOfCafeOrder" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET NUM_OF_PRINT=NUM_OF_PRINT+1
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<update id="payAllOrderOfBill" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET STATUS=2,
+		PAY_TIME=#{payTime},
+		LAST_UPDATE_STAFF_SN=#{lastUpdateStaffSn}
+		WHERE CAFE_TABLE_SN=#{cafeTableSn}
+		AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<update id="updateDiscountOfAllBill" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET TOTAL_MONEY=(PRICE*NUM_OF_FOOD*(100-#{discount}))/100,
+		DISCOUNT=#{discount}
+		WHERE CAFE_TABLE_SN=#{cafeTableSn}
+		AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<update id="updateCafeOrder" parameterType="CafeOrder">
+		UPDATE CAFE_ORDER
+		SET FOOD_SN=#{foodSn},
+		CAFE_TABLE_SN=#{cafeTableSn},
+		PRICE=#{price},
+		NUM_OF_FOOD=#{numOfFood},
+		MEMO=#{memo},
+		TOTAL_MONEY=#{totalMoney},
+		DISCOUNT=#{discount},
+		LAST_UPDATE_STAFF_SN=#{lastUpdateStaffSn}
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<update id="payMoneyCafeOrder" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET PAY_TIME=#{payTime},
+		STATUS=2,
+		LAST_UPDATE_STAFF_SN=#{lastUpdateStaffSn}
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<delete id="deleteCafeOrder" parameterType="map">
+		DELETE FROM CAFE_ORDER 
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</delete>
+	<!-- DELETE -->
+</mapper>

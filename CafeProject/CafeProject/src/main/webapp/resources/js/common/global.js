@@ -1,0 +1,1 @@
+var loadingHtml='<div id="myModal" class="modal fade"><div class="modal-dialog"><div class="modal-content-loading">    <div class="modal-body">    	<img src="Resources/image/icon/loading-icon.gif" class="imageLogin"/>    </div></div></div></div>';

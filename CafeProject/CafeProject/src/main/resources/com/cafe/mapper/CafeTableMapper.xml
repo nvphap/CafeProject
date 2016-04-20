@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.CafeTableMapper">
+	<resultMap type="CafeTable" id="idCafeTable">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="location" column="LOCATION"/>
+		<result property="position" column="POSITION"/>
+		<result property="tableGroupSn" column="TABLE_GROUP_SN"/>
+		<result property="status" column="STATUS"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="findCafeTableViaName" resultType="CafeTable">
+		SELECT * FROM CAFE_TABLE 
+		WHERE NAME=#{name} 
+		AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findAllCafeTableListOrderByIdx" parameterType="map" resultType="map">
+		SELECT cafeTable.*,tableGroup.NAME AS TABLE_GROUP_NAME, tableGroup.POSITION AS TABLE_GROUP_POS
+		FROM CAFE_TABLE cafeTable, TABLE_GROUP tableGroup
+		WHERE cafeTable.STATUS=1
+		AND cafeTable.TABLE_GROUP_SN=tableGroup.SN
+		AND cafeTable.CAFE_SHOP_SN=#{cafeShopSn}
+		ORDER BY tableGroup.POSITION ASC, cafeTable.POSITION ASC
+	</select>
+	
+	<select id="findAllCafeTableInGroup" resultType="CafeTable">
+		SELECT * FROM CAFE_TABLE
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=tableGroupSn">
+			AND TABLE_GROUP_SN =#{tableGroupSn} 
+		</if>
+	</select>
+	
+	<select id="findAllCafeTableList" parameterType="map" resultType="CafeTable">
+		SELECT *
+		FROM CAFE_TABLE
+		WHERE STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findCafeTable" resultType="CafeTable" parameterType="map">
+		SELECT * FROM CAFE_TABLE 
+		WHERE SN=#{sn} 
+		AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<update id="deleteCafeTableLogic" parameterType="map">
+		UPDATE CAFE_TABLE
+		SET STATUS=0
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<insert id="insertCafeTable" parameterType="CafeTable">
+		INSERT INTO CAFE_TABLE(CAFE_SHOP_SN,NAME,LOCATION,POSITION,TABLE_GROUP_SN) 
+		VALUES(#{cafeShopSn},#{name},#{location},#{position},#{tableGroupSn})
+	</insert>
+	
+	<update id="updateCafeTable" parameterType="CafeTable">
+		UPDATE CAFE_TABLE cafeTable
+		SET cafeTable.NAME=#{name},
+		cafeTable.LOCATION=#{location},
+		cafeTable.POSITION=#{position},
+		cafeTable.TABLE_GROUP_SN=#{tableGroupSn}
+		WHERE cafeTable.SN=#{sn}
+		AND cafeTable.CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	<!-- DELETE -->
+</mapper>

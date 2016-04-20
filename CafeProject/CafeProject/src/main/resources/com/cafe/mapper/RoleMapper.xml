@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.RoleMapper">
+	<resultMap type="Role" id="idRole">
+		<result property="sn" column="SN" />
+		<result property="name" column="NAME" />
+		<result property="memo" column="MEMO" />
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	
+	<!-- START-SELECT-->
+	<select id="findRoleViaTitle" parameterType="String" resultType="Role">
+		SELECT * FROM ROLE 
+		WHERE TITLE =#{title}
+		AND STATUS>0
+	</select>
+	
+	<select id="findRole" parameterType="int" resultType="Role">
+		SELECT * FROM ROLE 
+		WHERE SN=#{sn}
+		AND STATUS>0
+	</select>
+	
+	<select id="findAllRoleList" resultType="Role">
+		SELECT * FROM ROLE 
+		<if test="null==admin">
+			WHERE SN!=1
+		</if>
+	</select>
+</mapper>

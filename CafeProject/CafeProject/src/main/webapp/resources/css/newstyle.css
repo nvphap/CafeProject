@@ -1,0 +1,309 @@
+@charset "UTF-8";
+/*--------------------------------------------------CSS Document */
+.link-clear{
+	font-weight: bold;
+	color:red;
+	cursor:pointer;
+	font-size:14px;
+}
+
+.link-clear-inside{
+	position:absolute;
+	right:10px;	
+	top:0px;
+}
+
+.link-clear-container{
+	position:relative;
+}
+
+.form-control-ext{
+	text-color:blue;
+	height: 34px;
+	border-radius: 4px !important;
+	border:1px solid #CCC;
+	padding:3px;
+}
+
+.room-btn{
+	
+}
+
+.my-btn-blue-2 {
+	/* border-radius: 0px !important; */
+	font-weight: bold !important;
+}
+
+.blue-room{
+	min-width: 90px;
+}
+
+.btn-next-prev{
+	color:#FFF !important;
+	background-color:#09F !important;
+	border:1px solid #CCC;
+	text-align:center;
+}
+
+.modal-footer-ext{
+ 	height:55px;
+}
+
+.popup-title {
+	background-color: #0F8C8C;
+    font-size: 18px;
+    color: white;
+}
+
+.primary-column-detail {
+	color: #4E4545;
+    font-weight: bold;
+    width: 200px;
+    background-color: #E9E9E8;
+    text-align: left;
+    padding-left: 20px !important;
+}
+
+.primary-column{
+	color: #333;
+	text-align: center;
+}
+
+.ipt-short-50{
+	width:50px !important;
+}
+.ipt-short-70{
+	width:70px !important;
+}
+
+.ipt-short{
+	width:150px !important;
+}
+
+.ipt-tiny-short{
+	width:100px !important;
+}
+
+.ipt-medium{
+	width:250px !important;
+}
+
+.ipt-long{
+	width:350px !important;
+}
+
+.ipt-sup-long{
+	width:400px !important;
+}
+
+.ipt-tiny{
+	width:50px !important;
+}
+
+.ipt-sm{
+	width:200px !important;
+}
+.input-checkbox-radio{
+	opacity: 1 !important;
+	position: relative !important;
+	left:0px !important;
+	height: 12px !important;
+}
+
+.name-hightlight{
+	color:#0099FF;
+}
+
+.staff-favourite-link{
+	cursor:pointer;
+	color:blue;
+}
+
+.staff-favourite-link-2{
+	cursor:pointer;
+	color:blue;
+}
+
+.staff-focus-link{
+	cursor:pointer;
+	color:blue;
+}
+
+.like-link{
+	cursor:pointer;
+	color:blue;
+}
+
+.icon-favourist {
+	max-height: 18px;
+	max-width: 18px;
+}
+
+.history-reservation-date{
+	cursor:pointer;
+	color:blue;
+}
+.history-favourite-therapist-delete {
+	font-weight:bold;
+	color:red;
+	cursor:pointer;
+}
+
+.history-favourite-doctor-delete{
+	font-weight:bold;
+	color:red;
+	cursor:pointer;
+}
+.list-res-date{
+	cursor:pointer;
+	color:blue;
+}
+
+.span-error {
+	padding: 5px;
+	font-size: 12px;
+	background-color: #F2DEDE;
+	/* border: 1px solid #F00; */
+	color:red;
+}
+
+/*--------------------------------------- Style update 13/10/2015 --------------------------------*/
+/* div.scrollingDiv {
+   overflow-y:scroll;
+	overflow-y:auto;
+} */
+.reservationStyle {
+	z-index:9000;
+	/* width:265px; */
+	/* box-shadow: none !important; */
+}
+
+.page-sidebar .sidebar-menu>li>.linebordernone.submenu:before{
+	border-left:none !important;
+}
+.btn-hide-reservation{
+	margin-bottom: 15px !important; 
+	margin-top: 10px !important;
+	border-color: #FF5A00 !important;
+}
+/*--------------------------------------- Style update 14/10/2015 --------------------------------*/
+/*--------------------------------------- 	Reservation Calendar page --------------------------------*/
+.form-therapist-timeline{
+	/* padding-top: 10px; */
+	/* padding-bottom: 10px;	 */
+}
+.form-therapist-timeline .form-input-therapist-timeline{
+	padding: 5px;
+}
+.form-therapist-timeline .clear-icon{
+	background-color: rgba(255, 255, 255, 0) !important;
+	color: #F00 !important;
+	cursor: pointer;
+}
+
+/*--------------------------------------- Style update 15/10/2015 --------------------------------*/
+/*--------------------------------------- Style update side menu compact --------------------------------*/
+.page-sidebar.menu-compact:hover {
+	width: 265px !important;
+}
+.menu-compact-submenu-elements{
+	width: 260px !important;
+}
+.btn-hide-calendar-sidebar-style{
+	text-align: center; 
+	padding-top:5px !important;
+	padding-bottom:15px !important;
+	cursor:pointer;
+	width: 200px !important;
+}
+
+/*--------------------------------------- Style update 15/10/2015 --------------------------------*/
+/*--------------------------------------- Style update 	Counseling List Page --------------------------------*/
+.unstyle-widget{
+	background-color:none !important;
+	box-shadow: none !important;
+}
+.unstyle-widget-body{
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+.DTTTFooter{
+	padding-bottom: 20px;
+}
+.ipt-short-btn{
+	width: 90px;
+	text-align: center;
+}
+.textarea-full{
+	height:75px;
+	width:100%;
+}
+.input-mandatory{
+	color:red;
+}
+
+/*--------------------------------------- Pop up Update Reservation Status --------------------------------*/
+.pop-up-update-reservation {
+	width:1200px !important; 
+}
+@media only screen and (max-width: 1279px){
+	.pop-up-update-reservation{
+		width:750px !important;
+	}
+	.primary-column-detail{
+		width:160px !important;
+	}
+	.horizontal-scroll{
+		overflow-x:scroll;
+	}
+}
+
+.clear-icon-search {
+	background-color: rgba(255, 255, 255, 0) !important;
+	color: #F00 !important;
+	cursor: pointer;
+}
+
+.btn-delete{
+	color:#fff !important;
+}
+
+.btn-delete:hover{
+	opacity:0.9;
+}
+
+.error-title{
+	color:#d73d32;
+	font-weight:bold;
+}
+
+.guidance{
+	text-align:left;
+	color:gray;
+}
+
+.cf-table-statistic-number{
+	color:blue;
+	font-weight:normal !important;
+}
+
+.cf-total-money-title{
+	color:blue;
+	font-weight:bold;
+}
+
+.cf-order-notyet-pay{
+	color:#e74b37;
+	font-weight:bold;
+}
+
+.cf-blue-bold{
+	font-weight:bold;
+	color:blue;
+}
+
+.cf-recipes{
+	color:blue;
+	cursor:pointer;
+}
+

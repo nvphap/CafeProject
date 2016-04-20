@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.OtherOutlayMapper">
+	<resultMap type="OtherOutlay" id="idOtherOutlay">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="findOtherOutlayByName" parameterType="map" resultType="OtherOutlay">
+		SELECT * FROM OTHER_OUTLAY
+		WHERE NAME=#{name}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findLimitAllOtherOutlayList" parameterType="map" resultType="OtherOutlay">
+		SELECT * FROM OTHER_OUTLAY
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!= keyword">
+			AND NAME LIKE #{keyword}
+		</if>
+		ORDER BY NAME ASC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<insert id="insertOtherOutlay" parameterType="OtherOutlay" keyProperty="sn" useGeneratedKeys="true" keyColumn="SN" >
+		INSERT INTO OTHER_OUTLAY(CAFE_SHOP_SN,NAME) 
+		VALUES(#{cafeShopSn},#{name})
+	</insert>
+	<!-- DELETE -->
+</mapper>

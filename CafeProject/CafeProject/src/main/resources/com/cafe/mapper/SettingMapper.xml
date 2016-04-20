@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.SettingMapper">
+	<resultMap type="Setting" id="idSetting">
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="commonNo" column="COMMON_NO"/>
+		<result property="classNo" column="CLASS_NO"/>
+		<result property="numdata1" column="NUMDATA1"/>
+		<result property="numdata2" column="NUMDATA2"/>
+		<result property="numdata3" column="NUMDATA3"/>
+		<result property="chardata1" column="CHARDATA1"/>
+		<result property="chardata2" column="CHARDATA2"/>
+		<result property="chardata3" column="CHARDATA3"/>
+		<result property="classname1" column="CLASSNAME1"/>
+		<result property="classname2" column="CLASSNAME2" />
+		<result property="classname3" column="CLASSNAME3" />
+		<result property="memo" column="MEMO" />
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap> 
+	
+	
+	<!-- START-SELECT-->
+	<select id="findSetting" parameterType="map" resultType="Setting">
+		SELECT * FROM SETTING 
+		WHERE CAFE_SHOP_SN=#{cafeShopSn} 
+		AND COMMON_NO=#{commonNo} 
+		AND CLASS_NO=#{classNo}
+	</select>
+</mapper>

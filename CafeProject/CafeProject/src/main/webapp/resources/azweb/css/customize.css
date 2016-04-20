@@ -1,0 +1,91 @@
+@charset "UTF-8";
+/* CSS Document */
+.page-footer{
+	background:darkorange none repeat scroll 0% 0%;
+	color:#fff;
+	text-align:center;
+	padding:10px;
+}
+
+/* .page-sidebar:before{
+	width:170px !important;
+	
+} */
+
+.widget{
+	margin-bottom: 5px !important;
+}
+
+/* .row{
+	margin-left:-65px !important;
+} */
+/* .menu-dropdown{
+	width:170px !important;
+} */
+
+/*--------float-buttons-bar*/
+.float-breadcumbs{
+	position:fixed !important;
+	z-index:100;
+	width:100%;
+}
+/*--------float-buttons-bar*/
+.right-button-scrollbar{
+	position:fixed;
+	right:10px;
+	top:83px;
+	padding: 34px 18px 0 0;
+	z-index:100;
+}
+.back-to-top {
+    position: fixed;
+    bottom: 5em;
+    right: 28px;
+    top: 700px;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.back-to-top:hover {    
+    background-color: rgba(135, 135, 135, 0.50);
+}
+
+.control-label{
+	padding-top:5px !important;
+	padding-bottom:5px;
+	text-align:left !important;
+}
+.breadcrumb{
+	margin-top: 6px !important;
+}
+.footer-form-group{
+	padding: 10px;
+	display:inherit;
+	text-align:center;
+}
+.buttons-preview{
+	padding:10px;
+}
+.schedule-input{
+	padding-bottom:10px;
+}
+.table-toolbar{
+	text-align:right;
+}
+.DTTTFooter{
+	padding-top: 15px;
+}
+<!--POP UP AREA-->
+.modal-body{
+	padding:0px !important;
+}
+
+.td-title{
+	width: 20%;
+	background-color:#F0F0F0;
+}
+.custom-well{
+	padding: 0px !important;
+}
+<!--END POP UP AREA-->

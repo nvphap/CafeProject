@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.PermissionMapper">
+	<resultMap type="Permission" id="idPermission">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="pageGroupSn" column="PAGE_GROUP_SN" />
+		<result property="roleSn" column="ROLE_SN" />
+		<result property="pView" column="P_VIEW" />
+		<result property="pModify" column="P_MODIFY" />
+		<result property="pDelete" column="P_DELETE" />
+		<result property="pAdd" column="P_ADD" />
+		<result property="pPrint" column="P_PRINT" />
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	<!-- START-SELECT-->
+	<select id="findStaffListHasPermission" parameterType="map" resultType="Staff">
+		SELECT staff.* 
+		FROM PAGE_GROUP pageGroup, PERMISSION permission, ROLE role, STAFF staff
+		WHERE staff.ROLE_SN=role.SN
+		AND permission.ROLE_SN=role.SN
+		AND permission.PAGE_GROUP_SN=pageGroup.SN
+		AND staff.STATUS=1
+		AND pageGroup.NAME_CODE=#{nameCode}
+		AND role.SN!=4
+		<if test="admin==null">
+			 AND role.SN!=2
+		</if>
+		<if test="view==0 or view==1">
+			AND permission.P_VIEW=#{view}
+		</if>
+		<if test="add==0 or add==1">
+			AND permission.p_ADD=#{add}
+		</if>
+		<if test="update==0 or update==1">
+			AND permission.P_MODIFY=#{update}
+		</if>
+		<if test="delete==0 or delete==1">
+			AND permission.P_DELETE=#{delete}
+		</if>
+		<if test="print==0 or print==1">
+			AND permission.P_PRINT=#{print}
+		</if>
+	</select>
+	
+	<select id="findPermissionViaHospitalGroupRoleSn" parameterType="map" resultType="Permission">
+		SELECT p.* FROM PERMISSION p
+		WHERE p.ROLE_SN=#{roleSn}
+		AND p.PAGE_GROUP_SN=#{pageGroupSn}
+	</select>
+	
+	<select id="findPermissionViaNameCode" parameterType="map" resultType="Permission">
+		SELECT p.* FROM PERMISSION p, PAGE_GROUP pageGroup 
+		WHERE p.PAGE_GROUP_SN = pageGroup.SN 
+		AND p.ROLE_SN=#{roleSn}
+		AND pageGroup.NAME_CODE=#{nameCode}
+		<if test="type=='view' or type=='list'">
+			 AND p.P_VIEW=1
+		</if>
+		<if test="type=='update'">
+			 AND p.P_MODIFY=1
+		</if>
+		<if test="type=='delete'">
+			 AND p.P_DELETE=1
+		</if>
+		<if test="type=='add'">
+			 AND p.P_ADD=1
+		</if>
+		<if test="type=='print'">
+			 AND p.P_PRINT=1
+		</if>
+	</select>
+	
+	
+	<select id="findPermissionViaRoleGroup" parameterType="map" resultType="Permission">
+		SELECT * FROM PERMISSION 
+		WHERE ROLE_SN=#{roleSn}
+		AND PAGE_GROUP_SN=#{pageGroupSn}
+	</select>
+	
+	
+	<select id="findPermissionListViaRole" parameterType="map" resultType="Permission">
+		SELECT * FROM PERMISSION 
+		WHERE ROLE_SN=#{roleSn}
+	</select>
+	
+	<select id="findPermissionMapListViaRole" parameterType="map" resultType="map">
+		SELECT permission.*,pageGroup.NAME_CODE 
+		FROM PERMISSION permission, PAGE_GROUP pageGroup 
+		WHERE permission.PAGE_GROUP_SN=pageGroup.SN 
+		AND permission.ROLE_SN=#{roleSn}
+	</select>
+	
+	<select id="findPermission" parameterType="int" resultType="Permission">
+		SELECT * FROM PERMISSION WHERE SN=#{sn}
+	</select>
+	
+	<select id="countAdminPermissionList" parameterType="map" resultType="int">
+		SELECT COUNT(permission.SN) FROM PERMISSION permission, PAGE_GROUP pageGroup
+		WHERE permission.ROLE_SN=#{roleSn}
+		AND permission.PAGE_GROUP_SN = pageGroup.SN
+	</select>
+	
+	<select id="findAdminPermissionMapList" parameterType="map" resultType="map">
+		SELECT permission.*,pageGroup.NAME AS PAGE_GROUP_NAME,pageGroup.HAS_VIEW,pageGroup.HAS_MODIFY,pageGroup.HAS_CREATE,pageGroup.HAS_DELETE,pageGroup.HAS_PRINT
+		FROM PERMISSION permission, PAGE_GROUP pageGroup 
+		WHERE permission.ROLE_SN=#{roleSn}
+		AND permission.PAGE_GROUP_SN = pageGroup.SN
+		LIMIT #{offset} , #{limit}
+	</select>
+	<!-- END-SELECT-->
+	
+	<update id="updatePageGroupRolePermission" parameterType="map">
+		 UPDATE PERMISSION
+		 <if test="type=='view'">
+			 SET P_VIEW=#{value}
+		</if>
+		<if test="type=='modify'">
+			 SET P_MODIFY=#{value}
+		</if>
+		<if test="type=='delete'">
+			 SET P_DELETE=#{value}
+		</if>
+		<if test="type=='add'">
+			 SET P_ADD=#{value}
+		</if>
+		<if test="type=='print'">
+			 SET P_PRINT=#{value}
+		</if>
+		 WHERE SN =#{sn}
+	</update>
+	<!-- END-UPDATE -->
+</mapper>
