@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.OtherOutlayTranMapper">
+	<resultMap type="OtherOutlayTran" id="idOtherOutlayTran">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="otherOutlaySn" column="OTHER_OUTLAY_SN"/>
+		<result property="numOfOutlay" column="NUM_OF_OUTLAY"/>
+		<result property="totalPrice" column="TOTAL_PRICE"/>
+		<result property="timeTransaction" column="TIME_TRANSACTION"/>
+		<result property="memo" column="MEMO"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="calculateMoneyOfOtherOutlayTran" parameterType="map" resultType="int">
+		SELECT IFNULL(SUM(tran.TOTAL_PRICE),0)
+		FROM OTHER_OUTLAY_TRAN tran,OTHER_OUTLAY other
+		WHERE tran.CAFE_SHOP_SN=#{cafeShopSn}
+		AND tran.OTHER_OUTLAY_SN=other.SN
+		<if test="null!=startTime">
+			AND tran.TIME_TRANSACTION &gt;= #{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND tran.TIME_TRANSACTION &lt;=#{endTime}
+		</if>
+		<if test="null!=otherOutlaySn">
+			AND tran.OTHER_OUTLAY_SN =#{otherOutlaySn}
+		</if>
+		<if test="null==otherOutlaySn and null!= nameSearch">
+			AND other.NAME LIKE #{nameSearch}
+		</if>
+	</select>
+	
+	<select id="findOtherOutlayTranMap" parameterType="map" resultType="map">
+		SELECT tran.*,other.NAME
+		FROM OTHER_OUTLAY_TRAN tran, OTHER_OUTLAY other
+		WHERE tran.OTHER_OUTLAY_SN=other.SN
+		AND tran.SN=#{sn}
+		AND tran.CAFE_SHOP_Sn=#{cafeShopSn}
+	</select>
+	
+	<select id="findLimitOtherOutlayTranList" parameterType="map" resultType="map">
+		SELECT tran.*,other.NAME
+		FROM OTHER_OUTLAY_TRAN tran, OTHER_OUTLAY other
+		WHERE tran.OTHER_OUTLAY_SN=other.SN
+		AND tran.CAFE_SHOP_Sn=#{cafeShopSn}
+		<if test="null!=startTime">
+			AND tran.TIME_TRANSACTION &gt;= #{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND tran.TIME_TRANSACTION &lt;=#{endTime}
+		</if>
+		<if test="null!=otherOutlaySn">
+			AND tran.OTHER_OUTLAY_SN =#{otherOutlaySn}
+		</if>
+		<if test="null==otherOutlaySn and null!= nameSearch">
+			AND other.NAME LIKE #{nameSearch}
+		</if>
+		<if test="null== orderField or 'timeTransaction'==orderField">
+			ORDER BY tran.TIME_TRANSACTION
+		</if>
+		<if test="'totalPrice'==orderField">
+			ORDER BY tran.TOTAL_PRICE
+		</if>
+		<if test="null==sort or 'desc'==sort">
+			DESC
+		</if>
+		<if test="'asc'==sort">
+			ASC
+		</if>
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="countAllOtherOutlayTranList" parameterType="map" resultType="int">
+		SELECT COUNT(tran.SN)
+		FROM OTHER_OUTLAY_TRAN tran, OTHER_OUTLAY other
+		WHERE tran.OTHER_OUTLAY_SN=other.SN
+		AND tran.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=startTime">
+			AND tran.TIME_TRANSACTION &gt;= #{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND tran.TIME_TRANSACTION &lt;=#{endTime}
+		</if>
+		<if test="null!=otherOutlaySn">
+			AND tran.OTHER_OUTLAY_SN =#{otherOutlaySn}
+		</if>
+		<if test="null==otherOutlaySn and null!= nameSearch">
+			AND other.NAME LIKE #{nameSearch}
+		</if>
+	</select>
+	
+	<select id="countAllTypeOfOtherOutlayList" parameterType="map" resultType="int">
+		SELECT COUNT(DISTINCT tran.OTHER_OUTLAY_SN)
+		FROM OTHER_OUTLAY_TRAN tran, OTHER_OUTLAY other
+		WHERE tran.OTHER_OUTLAY_SN=other.SN
+		AND tran.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=startTime">
+			AND tran.TIME_TRANSACTION &gt;= #{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND tran.TIME_TRANSACTION &lt;=#{endTime}
+		</if>
+		<if test="null!=otherOutlaySn">
+			AND tran.OTHER_OUTLAY_SN =#{otherOutlaySn}
+		</if>
+		<if test="null==otherOutlaySn and null!= nameSearch">
+			AND other.NAME LIKE #{nameSearch}
+		</if>
+		<!-- GROUP BY tran.OTHER_OUTLAY_SN -->
+	</select>
+	
+	<select id="findLimitOtherOutlayTranStatisticList" parameterType="map" resultType="map">
+		SELECT tran.OTHER_OUTLAY_SN,other.NAME,IFNULL(SUM(tran.TOTAL_PRICE),0) AS TOTAL_PRICE, IFNULL(SUM(tran.NUM_OF_OUTLAY),0) AS NUM_OF_OUTLAY  
+		FROM OTHER_OUTLAY_TRAN tran, OTHER_OUTLAY other
+		WHERE tran.OTHER_OUTLAY_SN=other.SN
+		AND tran.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=startTime">
+			AND tran.TIME_TRANSACTION &gt;= #{startTime}
+		</if>
+		<if test="null!=endTime">
+			AND tran.TIME_TRANSACTION &lt;=#{endTime}
+		</if>
+		<if test="null!=otherOutlaySn">
+			AND tran.OTHER_OUTLAY_SN =#{otherOutlaySn}
+		</if>
+		<if test="null==otherOutlaySn and null!= nameSearch">
+			AND other.NAME LIKE #{nameSearch}
+		</if>
+		GROUP BY tran.OTHER_OUTLAY_SN,other.NAME
+		ORDER BY TOTAL_PRICE DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<update id="updateOtherOutlayTran" parameterType="OtherOutlayTran">
+		UPDATE OTHER_OUTLAY_TRAN
+		SET OTHER_OUTLAY_SN=#{otherOutlaySn},
+		NUM_OF_OUTLAY=#{numOfOutlay},
+		TOTAL_PRICE=#{totalPrice},
+		TIME_TRANSACTION=#{timeTransaction},
+		MEMO=#{memo},
+		LAST_UPDATE_STAFF_SN=#{lastUpdateStaffSn}
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<insert id="insertOtherOutlayTran" parameterType="OtherOutlayTran">
+		INSERT INTO OTHER_OUTLAY_TRAN(CAFE_SHOP_SN,OTHER_OUTLAY_SN,NUM_OF_OUTLAY,TOTAL_PRICE,TIME_TRANSACTION,MEMO,CREATE_STAFF_SN,LAST_UPDATE_STAFF_SN) 
+		VALUES(#{cafeShopSn},#{otherOutlaySn},#{numOfOutlay},#{totalPrice},#{timeTransaction},#{memo},#{createStaffSn},#{lastUpdateStaffSn})
+	</insert>
+	
+	<delete id="deleteOtherOutlayTran" parameterType="int">
+		DELETE FROM OTHER_OUTLAY_TRAN
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</delete>
+	<!-- DELETE -->
+</mapper>

@@ -73,6 +73,21 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 	
+	public int calculateTotalExpectedMoney(CafeOrderSearch search){
+		SqlSession session = MyBatisUtil.openSession();
+		try {
+			CafeOrderMapper mapper = session.getMapper(CafeOrderMapper.class);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put(CafeOrder.COL_CAFE_SHOP_SN,search.getCafeShopSn());
+			map.put(CafeOrder.COL_START_TIME,search.getStartTime());
+			map.put(CafeOrder.COL_END_TIME,search.getEndTime());
+			map.put(CafeOrder.COL_CAFE_TABLE_SN,search.getCafeTableSn());
+			return mapper.calculateTotalExpectedMoney(map);
+		} finally {
+			session.close();
+		}
+	}
+	
 	public List<CafeOrderForm> findLimitCafeOrderListStatusPay(CafeOrderSearch search){
 		List<CafeOrderForm> cafeOrderFormList = new ArrayList<CafeOrderForm>();
 		SqlSession session = MyBatisUtil.openSession();
@@ -673,6 +688,10 @@ public class OrderServiceImpl implements OrderService {
 			map.put(CafeOrder.COL_END_TIME,endTime);
 			Map<String,Object> cafeOrderMap= mapper.findOrderStatisticInPeriodTime(map);
 			StatisticByMonth statisticByMonth = toStatisticByMonth(cafeOrderMap);
+			Date today = Calendar.getInstance().getTime();
+			int daysBetween = AppDateUtils.calDaysBetween2Days(startTime,today);
+			int avergaMoney = (int)(statisticByMonth.getTotalMoney()/daysBetween);
+			statisticByMonth.setMoneyPerDay(avergaMoney);
 			return statisticByMonth;
 		} finally {
 			session.close();

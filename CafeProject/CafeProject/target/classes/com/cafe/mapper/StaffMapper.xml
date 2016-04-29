@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.StaffMapper">
+	<resultMap type="Staff" id="idStaff">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="roleSn" column="ROLE_SN"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="memo" column="MEMO"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- UPDATE -->
+	<update id="updateStaffStatus" parameterType="map">
+		 UPDATE STAFF staff
+		 SET staff.STATUS=#{status} 
+		 WHERE staff.SN=#{sn}
+		 AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<select id="findLimitStaffRole" parameterType="map" resultType="map">
+		SELECT cafeShop.SN AS CAFE_SHOP_SN,cafeShop.NAME AS CAFE_SHOP_NAME, staff.SN,staff.NAME,staff.USER_ID,staff.ROLE_SN,role.NAME AS ROLE_NAME,staff.LAST_UPDATE
+		FROM STAFF staff, ROLE role,CAFE_SHOP cafeShop
+		WHERE staff.ROLE_SN!=1
+		AND staff.ROLE_SN=role.SN
+		AND staff.STATUS=1
+		AND cafeShop.SN=staff.CAFE_SHOP_SN
+		<if test="null!=cafeShopSn">
+			AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+		</if>
+		ORDER BY cafeShop.SN,staff.NAME ASC
+		LIMIT #{offset} , #{limit}
+	</select>
+	
+	<select id="countAllStaff" parameterType="map" resultType="int">
+			SELECT COUNT(staff.SN) FROM STAFF staff, ROLE role  
+			WHERE staff.ROLE_SN = role.SN
+			AND staff.STATUS=1
+			AND staff.ROLE_SN!=1
+			<if test="null!=cafeShopSn">
+				AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+			</if>
+	</select>
+	
+	<!-- SELECT-->
+	<select id="findStaffRole" parameterType="map" resultType="map">
+		SELECT cafeShop.SN AS CAFE_SHOP_SN, cafeShop.NAME AS CAFE_SHOP_NAME,staff.SN,staff.NAME,staff.ROLE_SN,
+		role.NAME AS ROLE_NAME,staff.USER_ID,staff.MEMO
+		FROM STAFF staff, ROLE role,CAFE_SHOP cafeShop
+		WHERE role.SN=staff.ROLE_SN 
+		AND cafeShop.SN=staff.CAFE_SHOP_SN
+		AND staff.SN=#{sn}
+		AND staff.STATUS=1
+		AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findStaffViaUserId" parameterType="map" resultType="Staff">
+		SELECT * FROM STAFF staff 
+		WHERE staff.USER_ID=#{userId}
+		AND STATUS=1
+	</select>
+	
+	<select id="findStaff" parameterType="map" resultType="Staff">
+		SELECT * FROM STAFF staff
+		WHERE staff.USER_ID=#{userId} 
+		AND staff.PASSWORD=#{password}
+		AND staff.STATUS=1
+	</select>
+
+	<!-- DELETE -->
+	<update id="updateStaffPassword" parameterType="map">
+		 UPDATE STAFF staff
+			 SET staff.PASSWORD=#{password}
+		 WHERE staff.SN =#{sn}
+		 AND staff.STATUS=1
+		 AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	<update id="updateStaff" parameterType="Staff">
+		 UPDATE STAFF staff
+			 SET staff.NAME=#{name},
+			 staff.ROLE_SN=#{roleSn},
+			 staff.MEMO=#{memo},
+			 staff.USER_ID=#{userId}
+		 WHERE staff.SN =#{sn}
+		 AND staff.STATUS=1
+		 AND staff.CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<!-- INSERT -->
+	<insert id="insertStaff" parameterType="Staff" keyProperty="sn" useGeneratedKeys="true" keyColumn="SN" >	
+		 INSERT INTO STAFF(CAFE_SHOP_SN,NAME,ROLE_SN,MEMO,USER_ID,PASSWORD)
+				VALUES(#{cafeShopSn},#{name},#{roleSn},#{memo},#{userId},#{password})
+	</insert>
+	<!-- END INSERT -->
+</mapper>

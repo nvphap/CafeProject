@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.FoodUnitMapper">
+	<resultMap type="FoodUnit" id="idFoodUnit">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="findAllFoodUnitList" resultType="FoodUnit" parameterType="map">
+		SELECT * FROM FOOD_UNIT
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="findFoodUnit" resultType="FoodUnit" parameterType="int">
+		SELECT * FROM FOOD_UNIT 
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<select id="countAllFoodUnitList"   parameterType="map" resultType="int">
+		SELECT COUNT(SN) FROM FOOD_UNIT
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	<insert id="insertFoodUnit" parameterType="map">
+		INSERT INTO FOOD_UNIT(CAFE_SHOP_SN,NAME) 
+		VALUES(#{cafeShopSn},#{name})
+	</insert>
+	<update id="updateFoodUnit" parameterType="FoodUnit">
+		UPDATE FOOD_UNIT
+		SET NAME=#{name}
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	<!-- DELETE -->
+</mapper>

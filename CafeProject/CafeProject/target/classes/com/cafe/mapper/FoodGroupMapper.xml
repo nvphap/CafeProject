@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.FoodGroupMapper">
+	<resultMap type="FoodGroup" id="idFoodGroup">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="findAllFoodGroupList" resultType="FoodGroup">
+		SELECT * FROM FOOD_GROUP
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	<!-- DELETE -->
+</mapper>

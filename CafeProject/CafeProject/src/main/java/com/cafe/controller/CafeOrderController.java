@@ -149,8 +149,10 @@ public class CafeOrderController extends BaseController{
 		search.setEndTime(endDate);
 		int totalMoneyToday = orderService.calculateTotalMoney(search);
 		int numOfFoodToday=orderService.countAllNumOfFoodStatusPay(search);
+		int totalExpectedMoneyToday = orderService.calculateTotalExpectedMoney(search);
 		todayStatistic.setNumOfFoodToday(numOfFoodToday);
 		todayStatistic.setTotalMoneyToday(totalMoneyToday);
+		todayStatistic.setTotalExpectedMoneyToday(totalExpectedMoneyToday);
 		
 		List<TableStatistic> statisticList = orderService.findCafeOrderStatistic(loginUser.getCafeShopSn(),null,null);
 		todayStatistic.setTableStatisticList(statisticList);

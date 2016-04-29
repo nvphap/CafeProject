@@ -42,4 +42,5 @@ public interface CafeOrderMapper {
 	public int updatePrintAllOrderOfBill(Map<String,Object> map);
 	public int updatePrintOfCafeOrder(Map<String,Object> map);
 	public Map<String,Object> findOrderStatisticInPeriodTime(Map<String,Object> map);
+	public int calculateTotalExpectedMoney(Map<String,Object> map);
 }

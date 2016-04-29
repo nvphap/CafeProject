@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appromobile.hospital.service.mapper.PageGroupMapper">
+	<resultMap type="PageGroup" id="idPageGroup">
+		<result property="sn" column="SN" />
+		<result property="name" column="NAME" />
+		<result property="nameKo" column="NAME_KO" />
+		<result property="nameCode" column="NAME_CODE" />
+		<result property="memo" column="MEMO" />
+		<result property="type" column="TYPE" />
+		<result property="hasView" column="HAS_VIEW" />
+		<result property="hasCreate" column="HAS_CREATE" />
+		<result property="hasModify" column="HAS_MODIFY" />
+		<result property="hasDelete" column="HAS_DELETE" />
+		<result property="hasPrint" column="HAS_PRINT" />
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- START-SELECT-->
+	<select id="findAllPageGroupOfHospital" parameterType="map" resultType="PageGroup">
+		SELECT * FROM PAGE_GROUP
+		WHERE SN IN (SELECT pageGroup.SN 
+			FROM HOSPITAL hospital, HOSPITAL_SERVICE hospitalService,SERVICE_MODULE module, PAGE_GROUP pageGroup  
+			WHERE hospital.SN=hospitalService.HOSPITAL_SN
+			AND hospitalService.SERVICE_MODULE_SN=module.SN
+			AND module.PAGE_GROUP_SN=pageGroup.SN
+			AND module.STATUS=1
+			AND hospitalService.SERVICE_STATUS=1
+			AND hospital.STATUS=1
+			AND pageGroup.STATUS=1
+			AND hospital.SN=#{hospitalSn})
+	</select>
+	
+	<select id="findPageGroupViaNameCode" parameterType="String" resultType="PageGroup">
+		SELECT * FROM PAGE_GROUP 
+		WHERE NAME=#{nameCode}
+		AND STATUS>0
+	</select>
+	
+	<select id="findPageGroup" parameterType="int" resultType="PageGroup">
+		SELECT * FROM PAGE_GROUP 
+		WHERE SN=#{sn}
+		AND STATUS>0
+	</select>
+	
+	<select id="findAllPageGroup" parameterType="int" resultType="PageGroup">
+		SELECT * FROM PAGE_GROUP 
+		WHERE STATUS>0
+	</select>
+	
+	<select id="findAllPageGroupList" parameterType="map" resultType="PageGroup">
+		<if test="type != 1 and type!=0">
+			SELECT * FROM PAGE_GROUP
+			WHERE 1=1
+		</if>
+		<if test="type == 1 or type==0">
+			SELECT * FROM PAGE_GROUP
+			WHERE type=#{type}
+		</if>
+		<if test="null!=status">
+			AND STATUS=#{status}
+		</if>
+		<if test="keyword != null">
+			AND (NAME LIKE #{keyword}
+			OR NAME_CODE LIKE #{keyword}
+			OR MEMO LIKE #{keyword})
+		</if>
+		LIMIT #{offset} , #{limit}
+	</select>
+	
+	<select id="countAllPageGroupList" parameterType="map" resultType="int">
+		<if test="type != 1 and type!=0">
+			SELECT COUNT(SN) FROM PAGE_GROUP
+			WHERE 1=1
+		</if>
+		<if test="type == 1 or type==0">
+			SELECT COUNT(SN) FROM PAGE_GROUP
+			WHERE type=#{type}
+		</if>
+		<if test="null!=status">
+			AND STATUS=#{status}
+		</if>
+		<if test="keyword != null">
+			AND (NAME LIKE #{keyword}
+			OR NAME_CODE LIKE #{keyword}
+			OR MEMO LIKE #{keyword})
+		</if>
+	</select>
+	<!-- END-SELECT-->
+	
+	<!-- START-DELETE -->
+	<delete id="deletePageGroup" parameterType="int">
+		 DELETE FROM PAGE_GROUP WHERE SN=#{sn}
+	</delete>
+	
+	<update id="updatePageGroupStatus" parameterType="map">
+		 UPDATE PAGE_GROUP
+		 SET STATUS=#{status}
+		 WHERE SN=#{sn}
+	</update>
+	<!-- END-DELETE -->
+	
+	<!-- START-UPDATE -->
+	<update id="updatePageGroup" parameterType="PageGroup">
+		 UPDATE PAGE_GROUP
+			 SET NAME=#{name},
+			 	 NAME_KO=#{nameKo},
+			 	 MEMO=#{memo},
+			 	 TYPE=#{type},
+			 	 NAME_CODE=#{nameCode},
+			 	 HAS_VIEW=#{hasView},
+			 	 HAS_CREATE=#{hasCreate},
+			 	 HAS_MODIFY=#{hasModify},
+			 	 HAS_DELETE=#{hasDelete},
+			 	 HAS_PRINT=#{hasPrint}
+		 WHERE SN =#{sn}
+	</update>
+	<!-- END-UPDATE -->
+	
+	<!-- START-INSERT -->
+	<insert id="insertPageGroup" parameterType="PageGroup" keyProperty="sn" useGeneratedKeys="true" keyColumn="SN" >	
+		 INSERT INTO PAGE_GROUP(NAME,NAME_KO,NAME_CODE,MEMO,TYPE,HAS_VIEW,HAS_CREATE,HAS_MODIFY,HAS_DELETE,HAS_PRINT)
+				VALUES(#{name},#{nameKo},#{nameCode},#{memo},#{type},#{hasView},#{hasCreate},#{hasModify},#{hasDelete},#{hasPrint})
+	</insert>
+	<!-- END-INSERT --> 
+	
+</mapper>

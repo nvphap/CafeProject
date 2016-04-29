@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe.mapper.FoodMapper">
+	<resultMap type="Food" id="idFood">
+		<result property="sn" column="SN" />
+		<result property="cafeShopSn" column="CAFE_SHOP_SN"/>
+		<result property="name" column="NAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="foodUnitSn" column="FOOD_UNIT_SN"/>
+		<result property="foodGroupSn" column="FOOD_GROUP_SN"/>
+		<result property="memo" column="MEMO"/>
+		<result property="recipes" column="RECIPES"/>
+		<result property="lastUpdate" column="LAST_UPDATE"/>
+	</resultMap>
+	
+	<!-- SELECT-->
+	<select id="findAllFoodList" parameterType="map" resultType="Food">
+		SELECT * FROM FOOD WHERE STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	<select id="findFoodViaName" resultType="Food">
+		SELECT * FROM FOOD 
+		WHERE NAME=#{name} AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	<select id="findAllFoodMapList" parameterType="map" resultType="map">
+		SELECT food.*, foodUnit.NAME AS FOOD_UNIT_NAME, foodGroup.NAME AS FOOD_GROUP_NAME 
+		FROM FOOD food,FOOD_UNIT foodUnit, FOOD_GROUP foodGroup
+		WHERE food.FOOD_UNIT_SN=foodUnit.SN
+		AND food.FOOD_GROUP_SN=foodGroup.SN
+		AND food.STATUS=1
+		AND food.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=sn">
+			AND food.SN=#{sn} 
+		</if>
+		<if test="null == orderField or orderField=='lastUpdate'">
+			ORDER BY food.LAST_UPDATE
+		</if>
+		<if test="orderField=='price'">
+			ORDER BY food.PRICE
+		</if>
+		<if test="orderField=='name'">
+			ORDER BY food.NAME
+		</if>
+		<if test="sort ==null or sort=='desc'">
+			DESC
+		</if>
+		<if test="sort=='asc'">
+			ASC
+		</if>
+	</select>
+	
+	<select id="findAllFoodMapListForSuggestion" parameterType="map" resultType="map">
+		SELECT food.*, foodUnit.NAME AS FOOD_UNIT_NAME 
+		FROM FOOD food,FOOD_UNIT foodUnit
+		WHERE food.FOOD_UNIT_SN=foodUnit.SN
+		AND food.STATUS=1
+		AND food.CAFE_SHOP_SN=#{cafeShopSn}
+		<if test="null!=keyword">
+			AND (food.NAME LIKE #{keyword}
+			OR foodUnit.NAME LIKE #{keyword}
+			OR food.PRICE LIKE #{keyword}
+			OR food.MEMO LIKE #{keyword})
+		</if>
+		ORDER BY food.NAME ASC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="findFood" resultType="Food" parameterType="map">
+		SELECT * FROM FOOD 
+		WHERE SN=#{sn} AND STATUS=1
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<update id="deleteFoodLogic" parameterType="map">
+		UPDATE FOOD
+		SET STATUS=0
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
+	<select id="countAllFoodList" parameterType="map" resultType="int">
+		SELECT COUNT(SN) FROM FOOD
+		WHERE CAFE_SHOP_SN=#{cafeShopSn}
+	</select>
+	
+	<insert id="insertFood" parameterType="Food">
+		INSERT INTO FOOD(CAFE_SHOP_SN,NAME,PRICE,FOOD_UNIT_SN,MEMO,RECIPES,FOOD_GROUP_SN,PUBLIC_RECIPES) 
+		VALUES(#{cafeShopSn},#{name},#{price},#{foodUnitSn},#{memo},#{recipes},#{foodGroupSn},#{publicRecipes})
+	</insert>
+	
+	<update id="updateFood" parameterType="Food">
+		UPDATE FOOD
+		SET NAME=#{name},
+		PRICE=#{price},
+		FOOD_UNIT_SN=#{foodUnitSn},
+		MEMO=#{memo},
+		RECIPES=#{recipes},
+		FOOD_GROUP_SN=#{foodGroupSn},
+		PUBLIC_RECIPES=#{publicRecipes}
+		WHERE SN=#{sn}
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	<!-- DELETE -->
+</mapper>

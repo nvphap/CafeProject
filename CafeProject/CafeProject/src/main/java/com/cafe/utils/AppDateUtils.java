@@ -52,6 +52,22 @@ public class AppDateUtils {
 	private static DateFormat timeFormat5 = new SimpleDateFormat(DATE_FORMAT5);
 	
 	
+	public static int calDaysBetween2Days(Date startDate, Date endDate){
+		if(null== startDate || null==endDate){
+			return 1;
+		}
+		Calendar day1 = Calendar.getInstance();
+	    Calendar day2 = Calendar.getInstance(); 
+	    day1.setTime(startDate);
+	    day2.setTime(endDate);
+	    int daysBetween = day2.get(Calendar.DAY_OF_YEAR) - day1.get(Calendar.DAY_OF_YEAR);
+	    daysBetween+=1;
+	    if(daysBetween<1){
+	    	daysBetween=1;
+	    }
+	    return daysBetween;
+	}
+	
 	public static Time getHHMMTime(Date date){
 		String dateStr = toYYYYMMDDHHMMStr(date);
 		if(!StringUtils.isEmpty(dateStr)){

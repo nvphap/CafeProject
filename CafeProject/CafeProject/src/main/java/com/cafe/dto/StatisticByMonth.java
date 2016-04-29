@@ -29,6 +29,10 @@ public class StatisticByMonth implements java.io.Serializable {
 	
 	private String totalMoneyStr;
 	
+	private int moneyPerDay;
+	
+	private String moneyPerDayStr;
+	
 	private int totalMoneyOtherOutlay;
 	
 	private String totalMoneyOtherOutlayStr;
@@ -113,5 +117,22 @@ public class StatisticByMonth implements java.io.Serializable {
 
 	public void setTimeFrameEnd(String timeFrameEnd) {
 		this.timeFrameEnd = timeFrameEnd;
+	}
+
+	public int getMoneyPerDay() {
+		return moneyPerDay;
+	}
+
+	public void setMoneyPerDay(int moneyPerDay) {
+		this.moneyPerDay = moneyPerDay;
+		moneyPerDayStr = AppStrUtils.priceToString(moneyPerDay);
+	}
+
+	public String getMoneyPerDayStr() {
+		return moneyPerDayStr;
+	}
+
+	public void setMoneyPerDayStr(String moneyPerDayStr) {
+		this.moneyPerDayStr = moneyPerDayStr;
 	}
 }

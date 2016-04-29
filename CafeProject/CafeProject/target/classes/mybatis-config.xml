@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+	  <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias alias="Role" type="com.cafe.entity.Role" />
+		<typeAlias alias="Setting" type="com.cafe.entity.Setting" />
+		<typeAlias alias="Staff" type="com.cafe.entity.Staff" />
+		<typeAlias alias="FoodUnit" type="com.cafe.entity.FoodUnit" />
+		<typeAlias alias="Food" type="com.cafe.entity.Food" />
+		<typeAlias alias="CafeTable" type="com.cafe.entity.CafeTable" />
+		<typeAlias alias="OtherOutlayTran" type="com.cafe.entity.OtherOutlayTran" />
+		<typeAlias alias="OtherOutlay" type="com.cafe.entity.OtherOutlay" />
+		<typeAlias alias="CafeOrder" type="com.cafe.entity.CafeOrder" />
+		<typeAlias alias="Permission" type="com.cafe.entity.Permission" />
+		<typeAlias alias="TableGroup" type="com.cafe.entity.TableGroup" />
+		<typeAlias alias="FoodGroup" type="com.cafe.entity.FoodGroup" />
+		<typeAlias alias="CafeShop" type="com.cafe.entity.CafeShop" />
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="JNDI">
+            	<property name="data_source" value="java:comp/env/jdbc/SpringLTDS" />
+         	</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/cafe/mapper/TableGroupMapper.xml"/>
+		<mapper resource="com/cafe/mapper/CafeTableMapper.xml" />
+		<mapper resource="com/cafe/mapper/FoodMapper.xml" />
+		<mapper resource="com/cafe/mapper/FoodUnitMapper.xml" />
+		<mapper resource="com/cafe/mapper/FoodGroupMapper.xml" />
+		<mapper resource="com/cafe/mapper/SettingMapper.xml" />
+		<mapper resource="com/cafe/mapper/RoleMapper.xml" />
+		<mapper resource="com/cafe/mapper/StaffMapper.xml" />
+		<mapper resource="com/cafe/mapper/OtherOutlayTranMapper.xml" />
+		<mapper resource="com/cafe/mapper/OtherOutlayMapper.xml" />
+		<mapper resource="com/cafe/mapper/CafeOrderMapper.xml" />
+		<mapper resource="com/cafe/mapper/PermissionMapper.xml" />
+		<mapper resource="com/cafe/mapper/CafeShopMapper.xml" />
+	</mappers>
+	
+</configuration>

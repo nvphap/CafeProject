@@ -27,6 +27,10 @@ public class TodayStatistic implements java.io.Serializable {
 	
 	private int totalMoneyToday;
 	
+	private int totalExpectedMoneyToday; 
+	
+	private String totalExpectedMoneyTodayStr;
+	
 	private String totalMoneyTodayStr;
 	
 	private int otherOutlayToday;
@@ -81,6 +85,23 @@ public class TodayStatistic implements java.io.Serializable {
 
 	public void setOtherOutlayTodayStr(String otherOutlayTodayStr) {
 		this.otherOutlayTodayStr = otherOutlayTodayStr;
+	}
+
+	public int getTotalExpectedMoneyToday() {
+		return totalExpectedMoneyToday;
+	}
+
+	public void setTotalExpectedMoneyToday(int totalExpectedMoneyToday) {
+		this.totalExpectedMoneyToday = totalExpectedMoneyToday;
+		this.totalExpectedMoneyTodayStr  = AppStrUtils.priceToString(this.totalExpectedMoneyToday);
+	}
+
+	public String getTotalExpectedMoneyTodayStr() {
+		return totalExpectedMoneyTodayStr;
+	}
+
+	public void setTotalExpectedMoneyTodayStr(String totalExpectedMoneyTodayStr) {
+		this.totalExpectedMoneyTodayStr = totalExpectedMoneyTodayStr;
 	}
 }
 
