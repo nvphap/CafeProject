@@ -63,6 +63,7 @@
 									<spring:message code="food.price" var="food_price"/>
 									<spring:message code="food.unitName" var="food_unitName"/>
 									<spring:message code="food.foodGroup" var="food_groupName"/>
+									<spring:message code="food.profit" var="food_profit"/>
 									
 									<c:if test="${!empty errorMessage}">
 									<div class="form-group"><div class="col-md-6 col-md-offset-3">
@@ -92,6 +93,17 @@
 										<div class="col-md-6">
 											<form:input type="text" id="price" path="price"
 												class="form-control" placeholder="${food_price}" required="required" 
+												maxlength="6"/>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<div class="col-md-2"></div>
+										<form:label path="" for="input-append"
+											class="col-md-2 control-label">${food_profit}<span class="widget-caption danger"> (*)</span></form:label>
+										<div class="col-md-6">
+											<form:input type="text" id="profit" path="profit"
+												class="form-control" placeholder="${food_profit}" required="required" 
 												maxlength="6"/>
 										</div>
 									</div>
@@ -199,6 +211,10 @@
 	var j = jQuery.noConflict();
 	j(document).ready(function() {
 		j("#price").keydown(function(e){
+			isNumber(e);
+		});
+		
+		j("#profit").keydown(function(e){
 			isNumber(e);
 		});
 		

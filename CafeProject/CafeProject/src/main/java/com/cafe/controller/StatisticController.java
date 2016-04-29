@@ -151,11 +151,18 @@ public class StatisticController extends BaseController{
 		String monthTitle = getString("statistic.month")+AppStrUtils.BLANK;
 		OtherOutlayTranSearch outlaySearch = new OtherOutlayTranSearch();
 		outlaySearch.setCafeShopSn(loginUser.getCafeShopSn());
+		int curMonth = cal.get(Calendar.MONTH);
 		for (int i = 0; i < 12; i++) {//statistic in 12 months
 			cal.set(Calendar.MONTH,i);
 			startTime = getStartDate(loginUser.getCafeShopSn(),cal.getTime());
 			endTime=getEndDate(loginUser.getCafeShopSn(),cal.getTime());
-			statisticByMonth = orderService.findOrderStatisticInPeriodTime(loginUser.getCafeShopSn(),startTime,endTime);
+			
+			if(i==curMonth){//current month: just calculate with end is today.
+				Date today = Calendar.getInstance().getTime();
+				statisticByMonth = orderService.findOrderStatisticInPeriodTime(loginUser.getCafeShopSn(),startTime,today);
+			}else{
+				statisticByMonth = orderService.findOrderStatisticInPeriodTime(loginUser.getCafeShopSn(),startTime,endTime);
+			}
 			outlaySearch.setStartDate(startTime);
 			outlaySearch.setEndDate(endTime);
 			totalMoneyOutlay= storeService.calculateMoneyOfOtherOutlayTran(outlaySearch);

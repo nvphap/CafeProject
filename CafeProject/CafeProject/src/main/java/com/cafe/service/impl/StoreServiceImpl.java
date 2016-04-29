@@ -352,7 +352,8 @@ public class StoreServiceImpl implements StoreService {
 			String foodUnitName = AppStrUtils.toEmpty(map.get(FoodUnit.DB_FOOD_UNIT_NAME));
 			foodForm.setName(AppStrUtils.toEmpty(map.get(Food.DB_NAME))+"("+foodUnitName+")");
 			foodForm.setPrice(AppNumUtils.toIntValue(map.get(Food.DB_PRICE)));
-			foodForm.setPriceStr(AppStrUtils.priceToString(foodForm.getPrice()));
+			foodForm.setProfit(AppNumUtils.toIntValue(map.get(Food.DB_PROFIT)));
+			/*foodForm.setPriceStr(AppStrUtils.priceToString(foodForm.getPrice()));*/
 			foodForm.setFoodUnitSn(AppNumUtils.toLong(map.get(Food.DB_FOOD_UNIT_SN)));
 			foodForm.setMemo(AppStrUtils.toEmpty(map.get(Food.DB_MEMO)));
 			foodForm.setLastUpdate(AppDateUtils.toYYYYMMDDHHMMStr((Date)(map.get(Food.DB_LAST_UPDATE))));

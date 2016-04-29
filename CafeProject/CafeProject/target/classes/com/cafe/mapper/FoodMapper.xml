@@ -87,14 +87,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="insertFood" parameterType="Food">
-		INSERT INTO FOOD(CAFE_SHOP_SN,NAME,PRICE,FOOD_UNIT_SN,MEMO,RECIPES,FOOD_GROUP_SN,PUBLIC_RECIPES) 
-		VALUES(#{cafeShopSn},#{name},#{price},#{foodUnitSn},#{memo},#{recipes},#{foodGroupSn},#{publicRecipes})
+		INSERT INTO FOOD(CAFE_SHOP_SN,NAME,PRICE,PROFIT,FOOD_UNIT_SN,MEMO,RECIPES,FOOD_GROUP_SN,PUBLIC_RECIPES) 
+		VALUES(#{cafeShopSn},#{name},#{price},#{profit},#{foodUnitSn},#{memo},#{recipes},#{foodGroupSn},#{publicRecipes})
 	</insert>
 	
 	<update id="updateFood" parameterType="Food">
 		UPDATE FOOD
 		SET NAME=#{name},
 		PRICE=#{price},
+		PROFIT=#{profit},
 		FOOD_UNIT_SN=#{foodUnitSn},
 		MEMO=#{memo},
 		RECIPES=#{recipes},

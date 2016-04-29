@@ -28,6 +28,8 @@ public class FoodForm implements java.io.Serializable {
 	private String memo;
 	private int price;
 	private String priceStr;
+	private int profit;
+	private String profitStr;
 	private Long foodUnitSn;
 	private String foodUnitName;
 	private Long foodGroupSn;
@@ -86,6 +88,7 @@ public class FoodForm implements java.io.Serializable {
 
 	public void setPrice(int price) {
 		this.price = price;
+		this.priceStr = AppStrUtils.priceToString(this.price);
 	}
 
 	public Long getFoodUnitSn() {
@@ -126,5 +129,22 @@ public class FoodForm implements java.io.Serializable {
 
 	public void setFoodGroupName(String foodGroupName) {
 		this.foodGroupName = foodGroupName;
+	}
+
+	public int getProfit() {
+		return profit;
+	}
+
+	public void setProfit(int profit) {
+		this.profit = profit;
+		this.profitStr = AppStrUtils.priceToString(this.profit);
+	}
+
+	public String getProfitStr() {
+		return profitStr;
+	}
+
+	public void setProfitStr(String profitStr) {
+		this.profitStr = profitStr;
 	}
 }

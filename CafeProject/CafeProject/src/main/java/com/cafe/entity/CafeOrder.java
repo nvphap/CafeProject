@@ -67,6 +67,7 @@ public class CafeOrder implements java.io.Serializable {
 	private String memo;
 	private Long foodUnitSn;
 	private int totalMoney;
+	private int totalProfit;
 	private int discount;
 	private Long createStaffSn;
 	private Long lastUpdateStaffSn;
@@ -210,5 +211,13 @@ public class CafeOrder implements java.io.Serializable {
 
 	public void setCafeShopSn(Long cafeShopSn) {
 		this.cafeShopSn = cafeShopSn;
+	}
+
+	public int getTotalProfit() {
+		return totalProfit;
+	}
+
+	public void setTotalProfit(int totalProfit) {
+		this.totalProfit = totalProfit;
 	}
 }

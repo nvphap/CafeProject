@@ -30,6 +30,7 @@ public class Food implements java.io.Serializable {
 	public final static String DB_FOOD_NAME="FOOD_NAME";
 	public final static String DB_MEMO="MEMO";
 	public final static String DB_PRICE="PRICE";
+	public final static String DB_PROFIT="PROFIT";
 	public final static String DB_FOOD_UNIT_SN="FOOD_UNIT_SN";
 	public final static String DB_LAST_UPDATE="LAST_UPDATE";
 	public final static String DB_FOOD_GROUP_SN="FOOD_GROUP_SN";
@@ -41,6 +42,7 @@ public class Food implements java.io.Serializable {
 	private String recipes;
 	private int publicRecipes;
 	private int price;
+	private int profit;
 	private Long foodUnitSn;
 	private Long foodGroupSn;
 	private Timestamp lastUpdate;
@@ -126,5 +128,13 @@ public class Food implements java.io.Serializable {
 
 	public void setCafeShopSn(Long cafeShopSn) {
 		this.cafeShopSn = cafeShopSn;
+	}
+
+	public int getProfit() {
+		return profit;
+	}
+
+	public void setProfit(int profit) {
+		this.profit = profit;
 	}
 }

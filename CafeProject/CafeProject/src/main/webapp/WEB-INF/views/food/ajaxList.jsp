@@ -73,6 +73,10 @@
 	                </th>
 	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
 	                	aria-label="">
+						<spring:message code="food.profit" />
+	                </th>
+	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
+	                	aria-label="">
 	                    <spring:message code="food.memo" />
 	                </th>
 	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
@@ -110,6 +114,7 @@
 								${item.name}
 	                        </td>
 	                        <td>${item.priceStr}</td>
+	                        <td>${item.profitStr}</td>
 							<td>${item.memo}</td>
 							<td>${item.lastUpdate}</td>
 	                        <td>

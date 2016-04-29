@@ -164,6 +164,10 @@ public class CafeOrderController extends BaseController{
 		Date endMonth=getEndDate(cafeShopSn,null);
 		
 		StatisticByMonth statisticByMonth = orderService.findOrderStatisticInPeriodTime(cafeShopSn,startMonth,endMonth);
+		Date today = Calendar.getInstance().getTime();
+		int days = AppDateUtils.calDaysBetween2Days(startMonth,today);
+		int averageMoney = statisticByMonth.getTotalMoney()/days;
+		statisticByMonth.setMoneyPerDay(averageMoney);
 		OtherOutlayTranSearch search = new OtherOutlayTranSearch();
 		search.setCafeShopSn(cafeShopSn);
 		search.setStartDate(startMonth);

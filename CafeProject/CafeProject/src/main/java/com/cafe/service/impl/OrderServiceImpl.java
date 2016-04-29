@@ -688,8 +688,7 @@ public class OrderServiceImpl implements OrderService {
 			map.put(CafeOrder.COL_END_TIME,endTime);
 			Map<String,Object> cafeOrderMap= mapper.findOrderStatisticInPeriodTime(map);
 			StatisticByMonth statisticByMonth = toStatisticByMonth(cafeOrderMap);
-			Date today = Calendar.getInstance().getTime();
-			int daysBetween = AppDateUtils.calDaysBetween2Days(startTime,today);
+			int daysBetween = AppDateUtils.calDaysBetween2Days(startTime,endTime);
 			int avergaMoney = (int)(statisticByMonth.getTotalMoney()/daysBetween);
 			statisticByMonth.setMoneyPerDay(avergaMoney);
 			return statisticByMonth;

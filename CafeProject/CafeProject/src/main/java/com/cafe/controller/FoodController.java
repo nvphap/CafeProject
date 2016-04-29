@@ -154,6 +154,11 @@ public class FoodController extends BaseController{
 		if(price<=0){
 			errors.add("food.priceNotZero");
 		}
+		
+		int profit = AppNumUtils.toIntValue(food.getProfit());
+		if(profit>=price){
+			errors.add("food.profitPriceErr");
+		}
 		if(errors.size()>0){
 			model.addAttribute(ERROR_MSG,errors);
 			return false;
