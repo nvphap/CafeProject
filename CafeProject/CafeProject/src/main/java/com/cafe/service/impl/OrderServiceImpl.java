@@ -181,7 +181,7 @@ public class OrderServiceImpl implements OrderService {
 			newOrder.setFoodUnitSn(AppNumUtils.toLong(map.get(CafeOrder.DB_FOOD_UNIT_SN)));
 			newOrder.setFoodUnitName(AppStrUtils.toEmpty(map.get(FoodUnit.DB_FOOD_UNIT_NAME)));
 			newOrder.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
-			newOrder.setTotalMoneyStr(AppStrUtils.priceToString(newOrder.getTotalMoney()));
+			//newOrder.setTotalMoneyStr(AppStrUtils.priceToString(newOrder.getTotalMoney()));
 			newOrder.setOrderTime((Date)map.get(CafeOrder.DB_ORDER_TIME));
 			String orderTimeStr  = AppDateUtils.toYYYYMMDDHHMMStr(newOrder.getOrderTime());
 			newOrder.setOrderTimeStr(orderTimeStr);
@@ -467,6 +467,7 @@ public class OrderServiceImpl implements OrderService {
 			StatisticByDay newForm = new StatisticByDay();
 			newForm.setDayName(AppStrUtils.toEmpty(map.get(CafeOrder.DB_DAY_ORDER_NAME)));
 			newForm.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
+			newForm.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
 			newForm.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 			return newForm;
 		}
@@ -535,6 +536,7 @@ public class OrderServiceImpl implements OrderService {
 	public StatisticByTime fromGroupByTimeToForm(Map<String,Object> map){
 		if(null!=map){
 			StatisticByTime newForm = new StatisticByTime();
+			newForm.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
 			newForm.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
 			newForm.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 			newForm.setStartHour(AppStrUtils.toEmpty(map.get(CafeOrder.DB_START_TIME)));
@@ -550,6 +552,7 @@ public class OrderServiceImpl implements OrderService {
 			newForm.setCafeTableSn(AppNumUtils.toLong(map.get(CafeOrder.DB_CAFE_TABLE_SN)));
 			newForm.setCafeTableName(AppStrUtils.toEmpty(map.get(CafeTable.DB_NAME)));
 			newForm.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
+			newForm.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
 			newForm.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 			return newForm;
 		}
@@ -562,6 +565,7 @@ public class OrderServiceImpl implements OrderService {
 			newForm.setDateStr(AppDateUtils.toYYYYMMDDStr((Date)map.get(CafeOrder.DB_ORDER_DATE)));
 			newForm.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 			newForm.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
+			newForm.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
 			newForm.setFirstOrderTime(AppDateUtils.toYYYYMMDDHHMMStr((Date)map.get(CafeOrder.DB_FIRST_ORDER)));
 			newForm.setLastOrderTime(AppDateUtils.toYYYYMMDDHHMMStr((Date)map.get(CafeOrder.DB_LAST_ORDER)));
 			newForm.setDayOfWeek(AppStrUtils.toEmpty(map.get(CafeOrder.DB_DAY_ORDER_NAME)));
@@ -580,7 +584,8 @@ public class OrderServiceImpl implements OrderService {
 			newForm.setFoodUnitName(AppStrUtils.toEmpty(map.get(FoodUnit.DB_FOOD_UNIT_NAME)));
 			newForm.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 			newForm.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
-			newForm.setTotalMoneyStr(AppStrUtils.priceToString(newForm.getTotalMoney()));
+			newForm.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
+			//newForm.setTotalMoneyStr(AppStrUtils.priceToString(newForm.getTotalMoney()));
 			newForm.setPrice(AppNumUtils.toIntValue(map.get(Food.DB_PRICE)));
 			newForm.setPriceStr(AppStrUtils.priceToString(newForm.getPrice()));
 			return newForm;
@@ -701,6 +706,7 @@ public class OrderServiceImpl implements OrderService {
 		StatisticByMonth statisticByMonth = new StatisticByMonth();
 		statisticByMonth.setNumOfFood(AppNumUtils.toIntValue(map.get(CafeOrder.DB_NUM_OF_FOOD)));
 		statisticByMonth.setTotalMoney(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_MONEY)));
+		statisticByMonth.setTotalProfit(AppNumUtils.toIntValue(map.get(CafeOrder.DB_TOTAL_PROFIT)));
 		return statisticByMonth;
 	}
 }

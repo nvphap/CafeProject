@@ -31,6 +31,10 @@ public class StatisticByDate implements java.io.Serializable {
 	
 	private String totalMoneyStr;
 	
+	private int totalProfit;
+	
+	private String totalProfitStr;
+	
 	private String firstOrderTime;
 	
 	private String lastOrderTime;
@@ -102,5 +106,22 @@ public class StatisticByDate implements java.io.Serializable {
 
 	public void setDayOfWeek(String dayOfWeek) {
 		this.dayOfWeek = dayOfWeek;
+	}
+
+	public int getTotalProfit() {
+		return totalProfit;
+	}
+
+	public void setTotalProfit(int totalProfit) {
+		this.totalProfit = totalProfit;
+		totalProfitStr = AppStrUtils.priceToString(this.totalProfit);
+	}
+
+	public String getTotalProfitStr() {
+		return totalProfitStr;
+	}
+
+	public void setTotalProfitStr(String totalProfitStr) {
+		this.totalProfitStr = totalProfitStr;
 	}
 }

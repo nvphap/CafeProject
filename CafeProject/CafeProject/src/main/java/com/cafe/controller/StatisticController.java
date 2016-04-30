@@ -321,7 +321,7 @@ public class StatisticController extends BaseController{
 	
 	
 	private void loadTotalValues(Model model, CafeOrderSearch search){
-		OtherOutlayTranSearch outlaySearch = new OtherOutlayTranSearch();
+		/*OtherOutlayTranSearch outlaySearch = new OtherOutlayTranSearch();
 		outlaySearch.setCafeShopSn(search.getCafeShopSn());
 		outlaySearch.setStartDate(search.getStartTime());
 		outlaySearch.setEndDate(search.getEndTime());
@@ -332,7 +332,16 @@ public class StatisticController extends BaseController{
 		int numOfFoodOrder=orderService.countAllNumOfFoodStatusPay(search);
 		model.addAttribute("numOfCafeOrder",numOfFoodOrder);
 		totalMoney = AppStrUtils.priceToString(orderTotalMoney);
-		model.addAttribute("cafeOrderTotalMoney",totalMoney);
+		model.addAttribute("cafeOrderTotalMoney",totalMoney);*/
+		OtherOutlayTranSearch outlaySearch = new OtherOutlayTranSearch();
+		outlaySearch.setCafeShopSn(search.getCafeShopSn());
+		outlaySearch.setStartDate(search.getStartTime());
+		outlaySearch.setEndDate(search.getEndTime());
+		int othersTotalMoney = storeService.calculateMoneyOfOtherOutlayTran(outlaySearch);
+		StatisticByMonth  statisticByMonth = orderService.findOrderStatisticInPeriodTime(
+				search.getCafeShopSn(),search.getStartTime(),search.getEndTime());
+		statisticByMonth.setTotalMoneyOtherOutlay(othersTotalMoney);
+		model.addAttribute("statistic",statisticByMonth);
 	}
 	
 	private void loadOrderCafeGroupByFood(LoginUser loginUser,Model model,Date fromDate,Date toDate,String pageValue,String orderField, String sort){
@@ -554,7 +563,7 @@ public class StatisticController extends BaseController{
 		search.setOrderField(finalOrderField);
 		search.setSort(finalSort);
 		loadTotalValues(model,search);
-		Setting setting = settingService.findSetting(loginUser.getCafeShopSn(),"0001","01");
+		//Setting setting = settingService.findSetting(loginUser.getCafeShopSn(),"0001","01");
 		//int recordPerPage = setting.getNumdata1().intValue();
 		//StringBuffer extUrl = new StringBuffer();
 		//extUrl.append("&fromDate=").append(AppDateUtils.toYYMMDDStr(fromDate));

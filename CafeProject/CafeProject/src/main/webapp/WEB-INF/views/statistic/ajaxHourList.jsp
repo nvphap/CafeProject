@@ -5,26 +5,9 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<spring:message code="cafeOrder.totalMoney" var="cafeOrder_totalMoney"/>
-<spring:message code="cafeOrder.othersTotalMoney" var="cafeOrder_othersTotalMoney"/>
-<spring:message code="cafeOrder.totalCafeOrder" var="cafeOrder_totalCafeOrder"/>
-
 <div class="well with-header horizontal-scroll" style="padding-top: 40px;">
 	<div class="header bg-blue" style="height: 36px;"><spring:message code="cafeTable.listTitle"/></div>
-	<div style="margin-bottom:10px;">
-		
-		<div style="margin-bottom:5px;">
-			<span class="cf-total-money-title">${cafeOrder_totalCafeOrder}:</span>&nbsp;<span>${numOfCafeOrder}</span>
-		</div>
-		<div style="margin-bottom:5px;">
-			<span class="cf-total-money-title">${cafeOrder_totalMoney}:</span>&nbsp;<span>${cafeOrderTotalMoney}</span>
-		</div>
-		<div>
-			<span class="cf-total-money-title">${cafeOrder_othersTotalMoney}:</span>&nbsp;<span>${othersTotalMoney}</span>
-			&nbsp;<a id="cf_statistic_other_outlay_link" href="#"><spring:message code="common.detail"/></a>
-		</div>
-		<a id="cf_statistic_other_outlay_detail" style="display:none;" href="#" target="_blank"></a>
-	</div>
+	<%@include file="statisticHeader.jsp"%>
 	<div id="editabledatatable_wrapper" class="dataTables_wrapper form-inline no-footer">
 		<input id="sort" type="hidden" value="${sort}">
 		<input id="orderField" type="hidden" value="${orderField}">

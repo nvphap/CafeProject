@@ -21,6 +21,9 @@
 		<span style="font-weight:bold;"><spring:message code="cafeOrder.totalMoneyPerDay"/>:</span>
 		<span>${monthStatistic.moneyPerDayStr}</span>
 		&nbsp;&nbsp;
+		<span style="font-weight:bold;"><spring:message code="cafeOrder.totalProfit"/>:</span>
+		<span style="color:#e74b37">${monthStatistic.totalProfitStr}</span>
+		&nbsp;&nbsp;
 		<span style="font-weight:bold;"><spring:message code="cafeOrder.totalMoneyOtherOutlayInMonth"/>:</span>
 		<span>${monthStatistic.totalMoneyOtherOutlayStr}</span>
 		&nbsp;<a href="${pageContext.request.contextPath}/otherOutlay/list" target='_blank'><spring:message code="common.detail"/></a>
@@ -39,7 +42,7 @@
 	</span>
 	&nbsp;&nbsp;
 	<span style="font-weight:bold;"><spring:message code="cafeOrder.totalExpectedMoneyToday"/>:</span>
-	<span style="color:red">${todayStatistic.totalExpectedMoneyTodayStr}</span>
+	<span style="color:#e74b37">${todayStatistic.totalExpectedMoneyTodayStr}</span>
 	&nbsp;&nbsp;
 	<span style="font-weight:bold;"><spring:message code="cafeOrder.totalOtherOutlayToday"/>:</span>
 	<span>${todayStatistic.otherOutlayTodayStr}</span>

@@ -33,6 +33,10 @@ public class StatisticByTime implements java.io.Serializable {
 	
 	private String totalMoneyStr;
 	
+	private int totalProfit;
+	
+	private String totalProfitStr;
+	
 	private String startHour;
 	
 	private String endHour;
@@ -96,5 +100,22 @@ public class StatisticByTime implements java.io.Serializable {
 
 	public void setEndHour(String endHour) {
 		this.endHour = endHour;
+	}
+
+	public int getTotalProfit() {
+		return totalProfit;
+	}
+
+	public void setTotalProfit(int totalProfit) {
+		this.totalProfit = totalProfit;
+		totalProfitStr =AppStrUtils.priceToString(totalProfit);
+	}
+
+	public String getTotalProfitStr() {
+		return totalProfitStr;
+	}
+
+	public void setTotalProfitStr(String totalProfitStr) {
+		this.totalProfitStr = totalProfitStr;
 	}
 }

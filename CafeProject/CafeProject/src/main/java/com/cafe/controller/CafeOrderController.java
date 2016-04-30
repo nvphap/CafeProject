@@ -27,6 +27,7 @@ import com.cafe.dto.StatisticByMonth;
 import com.cafe.dto.TableStatistic;
 import com.cafe.dto.TodayStatistic;
 import com.cafe.entity.CafeOrder;
+import com.cafe.entity.Food;
 import com.cafe.entity.Setting;
 import com.cafe.form.CafeOrderForm;
 import com.cafe.form.CafeTableForm;
@@ -162,7 +163,6 @@ public class CafeOrderController extends BaseController{
 	private StatisticByMonth findMonthStatistic(Long cafeShopSn){
 		Date startMonth= getStartDate(cafeShopSn,null);
 		Date endMonth=getEndDate(cafeShopSn,null);
-		
 		StatisticByMonth statisticByMonth = orderService.findOrderStatisticInPeriodTime(cafeShopSn,startMonth,endMonth);
 		Date today = Calendar.getInstance().getTime();
 		int days = AppDateUtils.calDaysBetween2Days(startMonth,today);
@@ -239,7 +239,7 @@ public class CafeOrderController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/cafeOrder/update/ajaxUpdateDiscountAllBill", method = {RequestMethod.POST})
-	public String ajaxAddNewCafeOrder(Model model, HttpServletRequest request, HttpSession session,
+	public String ajaxUpdateDiscountAllBill(Model model, HttpServletRequest request, HttpSession session,
 			@RequestParam(value ="cafeTableSn", required = false) final String cafeTableSnStr,
 			@RequestParam(value ="discount", required = false) final String discountStr) {
 		LoginUser loginUser = (LoginUser)session.getAttribute(Constant.LOGIN_USER);
@@ -295,6 +295,8 @@ public class CafeOrderController extends BaseController{
 			newCafeOrder.setCafeShopSn(loginUser.getCafeShopSn());
 			newCafeOrder.setFoodSn(foodSn);
 			newCafeOrder.setPrice(price);
+			newCafeOrder.setTotalProfit(
+					getTotalProfit(loginUser.getCafeShopSn(),foodSn,numOfFood,price,totalMoney));
 			newCafeOrder.setNumOfFood(numOfFood);
 			newCafeOrder.setTotalMoney(totalMoney);
 			newCafeOrder.setMemo(memo);
@@ -310,6 +312,17 @@ public class CafeOrderController extends BaseController{
 			LOG.error(getExceptionContent(ex));
 		}
 		return "cafeOrder/ajaxList";
+	}
+	
+	private int getTotalProfit(Long cafeShopSn,Long foodSn,int numOfFood,int price,int realTotalMoney){
+		Food newFood = storeService.findFood(cafeShopSn,foodSn);
+		if(null!=newFood){
+			int totalMoney = price*numOfFood;
+			int totalProfit = newFood.getProfit()*numOfFood;
+			int realProfit = totalProfit-(totalMoney-realTotalMoney);
+			return realProfit;
+		}
+		return 0;
 	}
 	
 	@RequestMapping(value = "/cafeOrder/update/ajaxUpdateCafeOrder", method = {RequestMethod.POST})
@@ -338,6 +351,8 @@ public class CafeOrderController extends BaseController{
 			updateCafeOrder.setCafeTableSn(cafeTableSn);
 			updateCafeOrder.setFoodSn(foodSn);
 			updateCafeOrder.setPrice(price);
+			updateCafeOrder.setTotalProfit(
+					getTotalProfit(loginUser.getCafeShopSn(),foodSn,numOfFood,price,totalMoney));
 			updateCafeOrder.setNumOfFood(numOfFood);
 			updateCafeOrder.setTotalMoney(totalMoney);
 			updateCafeOrder.setMemo(memo);

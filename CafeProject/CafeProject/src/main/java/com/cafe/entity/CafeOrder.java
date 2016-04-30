@@ -54,6 +54,7 @@ public class CafeOrder implements java.io.Serializable {
 	public final static String DB_END_TIME="END_TIME";
 	public final static String DB_DISCOUNT="DISCOUNT";
 	public final static String DB_NUM_OF_PRINT="NUM_OF_PRINT";
+	public final static String DB_TOTAL_PROFIT="TOTAL_PROFIT";
 	
 	private Long sn;
 	private Long cafeShopSn;

@@ -22,7 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<select id="findOrderStatisticInPeriodTime" resultType="map" parameterType="map">
-		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
+			IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT 
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
 		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
@@ -31,7 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findLimitCafeOrderListGroupByTime" resultType="map" parameterType="map">
-		(SELECT '07:00:00' AS START_TIME, '11:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		(SELECT '07:00:00' AS START_TIME, '11:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,
+		IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT  
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
 		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
@@ -39,7 +41,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND cafeOrder.ORDER_TIME &lt;=#{endTime}
 		AND HOUR(cafeOrder.ORDER_TIME) &lt;=11)
 		UNION ALL
-		(SELECT '12:00:00' AS START_TIME, '17:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		(SELECT '12:00:00' AS START_TIME, '17:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,
+		IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT  
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
 		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
@@ -48,7 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND HOUR(cafeOrder.ORDER_TIME) &gt;=12
 		AND HOUR(cafeOrder.ORDER_TIME) &lt;=17)
 		UNION ALL
-		(SELECT '18:00:00' AS START_TIME, '23:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY  
+		(SELECT '18:00:00' AS START_TIME, '23:59:59' AS END_TIME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,
+		IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT  
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
 		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
@@ -84,7 +88,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findLimitCafeOrderListGroupByDay" resultType="map" parameterType="map">
-		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
+		IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT 
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
 		AND cafeOrder.CAFE_SHOP_SN=#{cafeShopSn}
@@ -97,6 +102,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="null== orderField or 'totalMoney'==orderField">
 			ORDER BY TOTAL_MONEY
 		</if>
+		<if test="'totalProfit'==orderField">
+			ORDER BY TOTAL_PROFIT
+		</if>
 		<if test="null==sort or 'asc'==sort">
 			ASC
 		</if>
@@ -107,7 +115,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- SELECT-->
 	<select id="findLimitCafeOrderListGroupByTable" resultType="map" parameterType="map">
-		SELECT cafeOrder.CAFE_TABLE_SN, cafeTable.NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY 
+		SELECT cafeOrder.CAFE_TABLE_SN, cafeTable.NAME, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD,
+		IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT 
 		FROM CAFE_ORDER cafeOrder, CAFE_TABLE cafeTable 
 		WHERE cafeOrder.CAFE_TABLE_SN=cafeTable.SN
 		AND cafeOrder.STATUS=2
@@ -153,7 +162,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findLimitCafeOrderListGroupByDate" resultType="map" parameterType="map">
-		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME,DATE(cafeOrder.ORDER_TIME) AS ORDER_DATE, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
+		SELECT DAYNAME(cafeOrder.ORDER_TIME) AS DAY_ORDER_NAME,DATE(cafeOrder.ORDER_TIME) AS ORDER_DATE, IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, 
+		IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT,
 		MIN(cafeOrder.ORDER_TIME) AS FIRST_ORDER, MAX(cafeOrder.ORDER_TIME) AS LAST_ORDER 
 		FROM CAFE_ORDER cafeOrder 
 		WHERE cafeOrder.STATUS=2
@@ -169,6 +179,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="'totalMoney'==orderField">
 			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="'totalProfit'==orderField">
+			ORDER BY TOTAL_PROFIT
 		</if>
 		<if test="null==sort or 'desc'==sort">
 			DESC
@@ -194,7 +207,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="findLimitCafeOrderListGroupByFood" resultType="map" parameterType="map">
 		(SELECT food.SN,food.NAME AS FOOD_NAME,food.PRICE,foodUnit.NAME AS FOOD_UNIT_NAME, foodUnit.SN AS FOOD_UNIT_SN,
-		SUM(cafeOrder.NUM_OF_FOOD) AS NUM_OF_FOOD, SUM(cafeOrder.TOTAL_MONEY) AS TOTAL_MONEY 
+		IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
+		IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT 
 		FROM CAFE_ORDER cafeOrder, FOOD food, FOOD_UNIT foodUnit
 		WHERE cafeOrder.FOOD_SN=food.SN
 		AND food.FOOD_UNIT_SN = foodUnit.SN
@@ -205,7 +219,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		GROUP BY food.SN,FOOD_NAME,FOOD_UNIT_NAME,FOOD_UNIT_SN)
 		UNION ALL
 		(SELECT food.SN,food.NAME AS FOOD_NAME,food.PRICE,foodUnit.NAME AS FOOD_UNIT_NAME, foodUnit.SN AS FOOD_UNIT_SN,
-			0 AS NUM_OF_FOOD, 0 AS TOTAL_MONEY
+			0 AS NUM_OF_FOOD, 0 AS TOTAL_MONEY,0 AS TOTAL_PROFIT
 			FROM FOOD food, FOOD_UNIT foodUnit
 			WHERE food.FOOD_UNIT_SN = foodUnit.SN
 			AND food.CAFE_SHOP_SN=#{cafeShopSn}
@@ -221,6 +235,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="'totalMoney'==orderField">
 			ORDER BY TOTAL_MONEY
+		</if>
+		<if test="'totalProfit'==orderField">
+			ORDER BY TOTAL_PROFIT
 		</if>
 		<if test="null==sort or 'desc'==sort">
 			DESC
@@ -377,8 +394,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="insertNewCafeOrder" parameterType="CafeOrder">
-		INSERT INTO CAFE_ORDER(CAFE_SHOP_SN,FOOD_SN,CAFE_TABLE_SN,PRICE,ORDER_TIME,NUM_OF_FOOD,MEMO,TOTAL_MONEY,STATUS,DISCOUNT,CREATE_STAFF_SN,LAST_UPDATE_STAFF_SN) 
-		VALUES(#{cafeShopSn},#{foodSn},#{cafeTableSn},#{price},#{orderTime},#{numOfFood},#{memo},#{totalMoney},#{status},#{discount},#{createStaffSn},#{lastUpdateStaffSn})
+		INSERT INTO CAFE_ORDER(CAFE_SHOP_SN,FOOD_SN,CAFE_TABLE_SN,PRICE,TOTAL_PROFIT,ORDER_TIME,NUM_OF_FOOD,MEMO,TOTAL_MONEY,STATUS,DISCOUNT,CREATE_STAFF_SN,LAST_UPDATE_STAFF_SN) 
+		VALUES(#{cafeShopSn},#{foodSn},#{cafeTableSn},#{price},#{totalProfit},#{orderTime},#{numOfFood},#{memo},#{totalMoney},#{status},#{discount},#{createStaffSn},#{lastUpdateStaffSn})
 	</insert>
 	
 	<update id="updatePrintAllOrderOfBill" parameterType="map">
@@ -420,6 +437,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET FOOD_SN=#{foodSn},
 		CAFE_TABLE_SN=#{cafeTableSn},
 		PRICE=#{price},
+		TOTAL_PROFIT=#{totalProfit},
 		NUM_OF_FOOD=#{numOfFood},
 		MEMO=#{memo},
 		TOTAL_MONEY=#{totalMoney},

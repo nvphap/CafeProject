@@ -35,6 +35,10 @@
 	                </th>
 	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
 	                	aria-label="">
+	                    <spring:message code="statistic.totalProfit" />
+	                </th>
+	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
+	                	aria-label="">
 							<spring:message code="cafeOrder.numOfFood" />
 	                </th>
 	                <th class="sorting" tabindex="0" aria-controls="editabledatatable" rowspan="1" colspan="1" 
@@ -67,6 +71,11 @@
 	                        <td>
 	                        	<div>
 									${item.moneyPerDayStr}
+								</div>
+	                        </td>
+	                        <td>
+	                        	<div>
+									${item.totalProfitStr}
 								</div>
 	                        </td>
 	                        <td>

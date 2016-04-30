@@ -30,6 +30,10 @@ public class StatisticByDay implements java.io.Serializable {
 	
 	private String totalMoneyStr;
 	
+	private int totalProfit;
+	
+	private String totalProfitStr;
+	
 	private String dayName;
 	
 	public StatisticByDay() {
@@ -83,5 +87,22 @@ public class StatisticByDay implements java.io.Serializable {
 
 	public void setDayName(String dayName) {
 		this.dayName = dayName;
+	}
+
+	public int getTotalProfit() {
+		return totalProfit;
+	}
+
+	public void setTotalProfit(int totalProfit) {
+		this.totalProfit = totalProfit;
+		totalProfitStr = AppStrUtils.priceToString(this.totalProfit);
+	}
+
+	public String getTotalProfitStr() {
+		return totalProfitStr;
+	}
+
+	public void setTotalProfitStr(String totalProfitStr) {
+		this.totalProfitStr = totalProfitStr;
 	}
 }
