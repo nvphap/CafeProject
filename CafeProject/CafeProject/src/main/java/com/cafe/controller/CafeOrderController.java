@@ -134,6 +134,9 @@ public class CafeOrderController extends BaseController{
 		
 		StatisticByMonth statisticByMonth = findMonthStatistic(loginUser.getCafeShopSn());
 		model.addAttribute("monthStatistic",statisticByMonth);
+		
+		List<CafeTableForm> cafeTableList = findAllCafeTableFormList(loginUser.getCafeShopSn(),false);
+		model.addAttribute("moveTableList",cafeTableList);
 	}
 	
 	private TodayStatistic findTodayStatistic(LoginUser loginUser,Date startDate, Date endDate){
@@ -250,6 +253,23 @@ public class CafeOrderController extends BaseController{
 			orderService.updateDiscountOfAllBill(loginUser.getCafeShopSn(),cafeTableSn,discount);
 			loadOrderCafeList(loginUser,model);
 			model.addAttribute("selectedDiscount",(discount/5));
+		}catch (Exception ex){
+			LOG.error(getExceptionContent(ex));
+		}
+		return "cafeOrder/ajaxList";
+	}
+	
+	@RequestMapping(value = "/cafeOrder/update/ajaxMoveToNewTable", method = {RequestMethod.POST})
+	public String ajaxMoveToNewTable(Model model, HttpServletRequest request, HttpSession session,
+			@RequestParam(value ="curTableSn", required = false) final String curTableSnStr,
+			@RequestParam(value ="moveToTableSn", required = false) final String moveToTableSnStr) {
+		LoginUser loginUser = (LoginUser)session.getAttribute(Constant.LOGIN_USER);
+		LOG.info("/cafeOrder/update/ajaxMoveToNewTable");
+		try{
+			Long curTableSn = AppNumUtils.toLong(curTableSnStr);
+			Long moveToTableSn = AppNumUtils.toLong(moveToTableSnStr);
+			orderService.moveToNewTable(loginUser.getCafeShopSn(),curTableSn,moveToTableSn,loginUser.getSn());
+			loadOrderCafeList(loginUser,model);
 		}catch (Exception ex){
 			LOG.error(getExceptionContent(ex));
 		}

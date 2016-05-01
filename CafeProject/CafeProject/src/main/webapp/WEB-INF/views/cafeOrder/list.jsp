@@ -32,10 +32,6 @@
 			<div class="page-body">
 				<div class="row">	
 					<div class="col-lg-12 col-sm-12 col-xs-12">
-						<%-- <h5 class="row-title before-blue">
-							<i class="fa fa-tags blue"></i>
-							<spring:message code="cafeOrder.title" />
-						</h5> --%>
 						<div class="widget">
 							<div class="widget-body">
 								<spring:message code="cafeOrder.foodName" var="cafeOrder_foodName" />
@@ -123,7 +119,7 @@
                                 <!-- form contents - END -->
                                 
                                 <!-- barRoom.jsp -->
-                                <div class="">
+                                <div >
 									<%@include file="barTable.jsp"%>
 								</div>
 								<!-- barRoom.jsp - END -->
@@ -209,12 +205,11 @@
 		j.ajax({
   	        type: "POST",
   	        url: "${pageContext.request.contextPath}/cafeOrder/view/ajaxGetCafeOrderStatisticOneTable",
-  	         data:{ cafeTableSn:cafeTableSn
-  	         },
+  	         data:{ cafeTableSn:cafeTableSn},
   	      	async: true,
   	         success: function(response){
+  	        	 console.log(response);
   	        	 if(response.length>0){
-  	        		 var cafeTableSn = j('#currentTableSn').val();
    				 	j('#cf_table_statistic_number_'+cafeTableSn).text('('+response+')');
   	        	}
             }

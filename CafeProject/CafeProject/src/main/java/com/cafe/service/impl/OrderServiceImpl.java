@@ -628,6 +628,24 @@ public class OrderServiceImpl implements OrderService {
 		return count;
 	}
 	
+	public int moveToNewTable(Long cafeShopSn,Long curTableSn,Long moveToTableSn,Long lastUpdateStaffSn){
+		SqlSession session = MyBatisUtil.openSession();
+		int count = 0;
+		try {
+			CafeOrderMapper mapper = session.getMapper(CafeOrderMapper.class);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put(CafeOrder.COL_CAFE_SHOP_SN,cafeShopSn);
+			map.put(CafeOrder.COL_CUR_TABLE_SN,curTableSn);
+			map.put(CafeOrder.COL_MOVE_TO_TABLE_SN,moveToTableSn);
+			map.put(CafeOrder.COL_LAST_UPDATE_STAFF_SN,lastUpdateStaffSn);
+			count = mapper.moveToNewTable(map);
+			session.commit();
+		} finally {
+			session.close();
+		}
+		return count;
+	}
+	
 	public CafeOrderForm findFullCafeOrder(Long cafeShopSn,Long cafeOrderSn){
 		SqlSession session = MyBatisUtil.openSession();
 		try {

@@ -50,4 +50,5 @@ public interface OrderService {
 	public int updatePrint(Long cafeShopSn,Long cafeTableSn,Long cafeOrderSn);
 	public StatisticByMonth findOrderStatisticInPeriodTime(Long cafeShopSn,Date startTime,Date endTime);
 	public int calculateTotalExpectedMoney(CafeOrderSearch search);
+	public int moveToNewTable(Long cafeShopSn,Long curTableSn,Long moveToTable,Long lastUpdateStaffSn);
 }

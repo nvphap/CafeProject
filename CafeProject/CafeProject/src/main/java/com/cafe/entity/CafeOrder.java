@@ -29,6 +29,8 @@ public class CafeOrder implements java.io.Serializable {
 	public final static String COL_SN="sn";
 	public final static String COL_PAY_TIME="payTime";
 	public final static String COL_CAFE_TABLE_SN="cafeTableSn";
+	public final static String COL_CUR_TABLE_SN="curTableSn";
+	public final static String COL_MOVE_TO_TABLE_SN="moveToTableSn";
 	public final static String COL_DISCOUNT="discount";
 	public final static String COL_LAST_UPDATE_STAFF_SN="lastUpdateStaffSn";
 	public final static String COL_NUM_OF_PRINT="numOfPrint";

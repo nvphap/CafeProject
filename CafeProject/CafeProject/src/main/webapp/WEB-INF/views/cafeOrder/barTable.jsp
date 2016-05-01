@@ -25,9 +25,6 @@
 					 		<tr><td><div class="cf-blue-bold" style="margin-bottom:5px;">${table.tableGroupName}&nbsp;</div></td>
 					 		<td><div style="margin-bottom:5px;">
 					 	</c:if>
-					 	<%-- <c:if test="${fn:length(tableList) eq val}">
-						   </div></td></tr>
-						</c:if> --%>
 					</c:if>
 					<c:if test="${table.sn==selectedTable}">
 						<button id="table_${table.sn}" type="button" title="${table.location}"

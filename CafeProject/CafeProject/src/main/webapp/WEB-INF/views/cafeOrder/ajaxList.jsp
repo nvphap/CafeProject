@@ -84,6 +84,19 @@
            		<i class="fa fa-share"></i> <spring:message code="cafeOrder.pay" />
 			</a>
 		</span>
+		&nbsp;&nbsp;
+		<span><spring:message code="cafeOrder.moveTable"/>:</span>
+		 <span class="form-group form-input-therapist-timeline">
+             <select name="cf_order_move_table" id="cf_order_move_table" class="form-control-ext ipt-short">
+				<c:forEach items="${moveTableList}" var="table">
+					 <option value="${table.sn}">${table.name}</option>
+				</c:forEach>
+			</select>
+			<a id="cf_cafe_move_table_btn" href="#" class="btn btn-info btn-xs edit">
+                <i class="fa fa-edit"></i>
+                <spring:message code="cafeOrder.moveBtn" />
+            </a>
+		</span>
 	</div>
 	<div id="editabledatatable_wrapper" class="dataTables_wrapper form-inline no-footer">
 		
@@ -223,6 +236,33 @@
 
 
 <script type="text/javascript">
+	function moveToNewTable(){
+		var curTableSn = j('#currentTableSn').val();
+		var moveToTableSn = j('#cf_order_move_table').val();
+		j.ajax({
+		        type: "POST",
+		        url: "${pageContext.request.contextPath}/cafeOrder/update/ajaxMoveToNewTable",
+		         data:{
+		        	curTableSn:curTableSn,
+		        	moveToTableSn:moveToTableSn
+		         },
+		      	async: true,
+		         success: function(response){
+				j('#orderDetailList').html(response);
+				displayCafeOrderOfCurrentTable();
+				//resetCafeOrder();
+				//updateStatusOfAddUpdateBtn();
+				resetBillInfo();
+				updateCafeOrderStatisticForOneTable(curTableSn);
+				updateCafeOrderStatisticForOneTable(moveToTableSn);
+	           }
+	       });
+	}
+	
+	function resetBillInfo(){
+		j('#cf_order_bill_discount').val(0);
+	}
+
 	j(document).ready(function() {
 		j('#cf_num_of_cafe_order_link').click(function(){
 			var today = getToday();
@@ -248,6 +288,10 @@
 		
 		j('#cf_cafe_bill_pay').click(function(){
 			payAllOrderOfBill();
+		});
+		
+		j('#cf_cafe_move_table_btn').click(function(){
+			moveToNewTable();
 		});
 		
 		function payAllOrderOfBill(){
@@ -296,10 +340,6 @@
    	            }
    	        });
     	}
-		
-		function resetBillInfo(){
-			j('#cf_order_bill_discount').val(0);
-		}
 		
 		j('#cf_statistic_other_outlay_link').click(function(){
 			var today = new Date();

@@ -21,6 +21,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="lastUpdate" column="LAST_UPDATE"/>
 	</resultMap>
 	
+	<update id="moveToNewTable" parameterType="map">
+		UPDATE CAFE_ORDER
+		SET CAFE_TABLE_SN=#{moveToTableSn},
+		LAST_UPDATE_STAFF_SN=#{lastUpdateStaffSn}
+		WHERE CAFE_TABLE_SN =#{curTableSn}
+		AND STATUS=1 
+		AND CAFE_SHOP_SN=#{cafeShopSn}
+	</update>
+	
 	<select id="findOrderStatisticInPeriodTime" resultType="map" parameterType="map">
 		SELECT IFNULL(SUM(cafeOrder.NUM_OF_FOOD),0) AS NUM_OF_FOOD, IFNULL(SUM(cafeOrder.TOTAL_MONEY),0) AS TOTAL_MONEY,
 			IFNULL(SUM(cafeOrder.TOTAL_PROFIT),0) AS TOTAL_PROFIT 
